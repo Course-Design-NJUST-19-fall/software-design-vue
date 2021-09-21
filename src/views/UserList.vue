@@ -1,0 +1,115 @@
+<template>
+  <div>
+    <el-container style="height: 500px; border: 1px solid #eee">
+      <el-container>
+        <el-header style="text-align: right; font-size: 12px">
+          <el-row>
+            <el-col :span="14">
+              <div style="font-size: 30px">
+                所有平台用户
+              </div>
+            </el-col>
+
+            <el-col :span="10">
+              <div class="grid-content bg-purple-light">
+                <el-link href="\SelfCenterAdmin" >返回管理中心</el-link>
+              </div>
+            </el-col>
+          </el-row>
+        </el-header>
+        <br>
+
+        <el-main>
+          <el-table :data="tableData" style="text-align: center">
+            <el-table-column align="center" prop="num" label="序号"   >
+            </el-table-column>
+            <el-table-column align="center" prop="UserName" label="用户名"   >
+            </el-table-column>
+            <el-table-column align="center" prop="UserType" label="用户类型" >
+            </el-table-column>
+            <el-table-column align="center" prop="UserClass" label="用户所在班级" >
+            </el-table-column>
+            <el-table-column align="center" prop="UserPhoneNumber" label="用户手机号" >
+            </el-table-column>
+          </el-table>
+        </el-main>
+      </el-container>
+    </el-container>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "UserList",
+  data() {
+    const item = {
+      num:'2',
+      UserName: '九亿少女的梦',
+      UserType:'老师',
+      UserPhoneNumber:'10086',
+      UserClass:'919106840135',
+    };
+    return {
+      tableData: Array(20).fill(item)
+    }
+  },
+  methods:{
+
+    deleteRow(index, rows) {
+      rows.splice(index, 1);
+    }
+  }
+
+}
+</script>
+
+<style scoped>
+
+.el-header {
+  background-color: #B3C0D1;
+  color: #333;
+  line-height: 60px;
+  bottom: 1px;
+  width:100%;
+  height:500px;
+}
+
+.el-aside {
+  color: #333;
+}
+
+.el-carousel__item h3 {
+  color: #475669;
+  font-size: 14px;
+  opacity: 0.75;
+  line-height: 150px;
+  align-self: center;
+  margin: 0;
+}
+
+.el-carousel__item:nth-child(2n) {
+  background-color: #99a9bf;
+  align-self: center;
+}
+
+.el-carousel__item:nth-child(2n+1) {
+  background-color: #d3dce6;
+  align-self: center;
+}
+
+.el-col{
+  text-align: right;
+
+}
+
+.el-footer{
+  position:absolute;
+  color:#fff;
+  bottom: 100px;
+  width:100%;
+  height:100px;
+  line-height:10px;
+  text-align:center;
+  background-color: white;
+}
+</style>
