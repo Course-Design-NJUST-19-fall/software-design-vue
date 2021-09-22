@@ -5,25 +5,18 @@
 
     <el-container>
       <el-header style="text-align: right; font-size: 12px">
-        <el-row>
-          <el-col :span="14">
-            <div style="font-size: 30px">
-              平台管理
-            </div>
-          </el-col>
-
-          <el-col :span="10">
-            <div class="grid-content bg-purple-light">
-              <el-link href="\Login" >退出账号&nbsp&nbsp</el-link>
-              <el-link href="\ListProblem" >题目练习&nbsp&nbsp</el-link>
-              <el-link href="\EditMyself" target="_blank">修改信息</el-link>
-            </div>
-          </el-col>
-        </el-row>
+        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+          <el-menu-item index="1"><el-link href="\Main" >主页</el-link></el-menu-item>
+          <el-menu-item index="2"><el-link href="\Login" >题目列表</el-link></el-menu-item>
+          <el-menu-item index="3" ><el-link href="\ProblemStatus" >提交状态</el-link></el-menu-item>
+          <el-menu-item index="4" ><el-link href="\SelfCenterAdmin" >个人中心</el-link></el-menu-item>
+          <el-menu-item index="5" > <el-link href="\Login" >退出账号</el-link></el-menu-item>
+        </el-menu>
+        <div class="line"></div>
       </el-header>
       <el-container>
         <el-aside width="400px" style="background-color: rgb(238, 241, 246)">
-          <el-menu>
+          <el-menu :default-openeds="['1','2', '3','4','5','6']">
             <el-submenu index="1">
               <template slot="title">青铜</template>
               <el-menu-item index="1-1">过题数<10,正确率<10%</el-menu-item>
@@ -79,8 +72,16 @@
 <script>
 export default {
   name: "SelfCenterAdmin",
+  data() {
+    return {
+      activeIndex: '4',
+      activeIndex2: '4'
+    }
+  },
   methods: {
-
+    handleSelect(key, keyPath) {
+      console.log(key, keyPath);
+    },
     delProblem() {
       this.$prompt('请输入将要删除的题号', '提示', {
         confirmButtonText: '确定',

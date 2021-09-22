@@ -2,22 +2,16 @@
 <div>
   <el-container>
     <el-header style="text-align: right; font-size: 12px">
+      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+        <el-menu-item index="1"><el-link href="\Main" >主页</el-link></el-menu-item>
+        <el-menu-item index="2"><el-link href="\Login" target="_blank">题目列表</el-link></el-menu-item>
+        <el-menu-item index="3" ><el-link href="\ProblemStatus" target="_blank">提交状态</el-link></el-menu-item>
+        <el-menu-item index="4" ><el-link href="\SelfCenter" target="_blank">个人中心</el-link></el-menu-item>
+        <el-menu-item index="5" >  <el-link href="\EditMyself" target="_blank">修改信息</el-link></el-menu-item>
+        <el-menu-item index="6" > <el-link href="\Login" >退出账号</el-link></el-menu-item>
+      </el-menu>
+      <div class="line"></div>
 
-      <el-row>
-        <el-col :span="14">
-          <div style="font-size: 30px">
-            <span>
-            </span>
-              您正在修改个人信息
-          </div>
-        </el-col>
-
-        <el-col :span="10" >
-          <div class="grid-content bg-purple-light">
-            <el-link style="text-align: right" href="\SelfCenter" target="_blank">返回</el-link>
-          </div>
-        </el-col>
-      </el-row>
     </el-header>
     <el-main>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
@@ -109,7 +103,9 @@ export default {
           { required: true, message: '请选用户类型', trigger: 'change' }
         ],
 
-      }
+      },
+      activeIndex: '5',
+      activeIndex2: '5',
     };
   },
 
@@ -136,7 +132,13 @@ export default {
 
 <style scoped>
 
-.el-header, .el-footer {
+.el-header{
+  background-color: white;
+  color: #333;
+  text-align: center;
+  line-height: 60px;
+}
+.el-footer {
   background-color: #B3C0D1;
   color: #333;
   text-align: center;

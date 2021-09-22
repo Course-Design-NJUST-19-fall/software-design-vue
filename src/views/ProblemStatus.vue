@@ -5,20 +5,13 @@
 
     <el-container>
       <el-header style="text-align: right; font-size: 12px">
-        <el-row>
-          <el-col :span="12">
-            <div style="font-size: 30px">
-              题目提交状态页面
-            </div>
-          </el-col>
-
-          <el-col :span="12">
-            <div class="grid-content bg-purple-light">
-              <el-link href="\SelfCenter" >个人中心&nbsp</el-link>
-              <el-link href="\ShowProblem" >返回</el-link>
-            </div>
-          </el-col>
-        </el-row>
+        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+          <el-menu-item index="1"><el-link href="\Main" >主页</el-link></el-menu-item>
+          <el-menu-item index="2"><el-link href="\Login" >题目列表</el-link></el-menu-item>
+          <el-menu-item index="3" ><el-link href="\ProblemStatus" >提交状态</el-link></el-menu-item>
+          <el-menu-item index="4" ><el-link href="\SelfCenter" >个人中心</el-link></el-menu-item>
+        </el-menu>
+        <div class="line"></div>
       </el-header>
 
       <el-table :data="tableData" style="text-align: center">
@@ -50,7 +43,9 @@ export default {
       LimitMemory:'1mb',
     };
     return {
-      tableData: Array(20).fill(item)
+      tableData: Array(20).fill(item),
+      activeIndex: '3',
+      activeIndex2: '3'
     }
   }
 }
@@ -58,7 +53,7 @@ export default {
 
 <style scoped>
 .el-header {
-  background-color: #B3C0D1;
+  background-color: white;
   color: #333;
   line-height: 60px;
 }

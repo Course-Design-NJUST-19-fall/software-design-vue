@@ -15,6 +15,7 @@ import HomeworkofStudent from '../views/HomeworkofStudent.vue'
 import AllHomework from '../views/AllHomework.vue'
 import AddProblem from '../views/AddProblem.vue'
 import UserList from '../views/UserList.vue'
+import Main from '../views/Main.vue'
 
 Vue.use(VueRouter)
 
@@ -38,6 +39,11 @@ const routes = [
     path: '/HomeworkofStudent',
     name: 'HomeworkofStudent',
     component: HomeworkofStudent
+  },
+  {
+    path: '/Main',
+    name: 'Main',
+    component: Main
   },
   {
     path: '/FindMyself',

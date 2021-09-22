@@ -14,7 +14,7 @@
               <div class="grid-content bg-purple-light">
                 <el-link href="\ListProblem" >题目练习&nbsp&nbsp</el-link>
                 <el-link href="\ShowProblem" >返回题目详情&nbsp&nbsp</el-link>
-                <el-link href="\SelfCenter" target="_blank">个人中心</el-link>
+                <el-link href="\SelfCenter" >个人中心</el-link>
               </div>
             </el-col>
           </el-row>
