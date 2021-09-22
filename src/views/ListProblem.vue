@@ -2,14 +2,17 @@
   <div>
 
 
-    <el-container style="height: 500px; border: 1px solid #eee">
-      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-        <el-menu-item index="1"><el-link href="\Main" target="_blank">主页</el-link></el-menu-item>
-        <el-menu-item index="2"><el-link href="\Login" target="_blank">题目列表</el-link></el-menu-item>
-        <el-menu-item index="3" ><el-link href="\ProblemStatus" target="_blank">提交状态</el-link></el-menu-item>
-        <el-menu-item index="4" ><el-link href="\SelfCenter" target="_blank">个人中心</el-link></el-menu-item>
-      </el-menu>
-      <div class="line"></div>
+    <el-container style="height: 750px; border: 1px solid #eee">
+      <el-container>
+     <el-header style="color: white; height: 60px;">
+       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+         <el-menu-item index="1"><el-link href="\Main" >主页</el-link></el-menu-item>
+         <el-menu-item index="2"><el-link href="\ListProblem" >题目列表</el-link></el-menu-item>
+         <el-menu-item index="3" ><el-link href="\ProblemStatus" >提交状态</el-link></el-menu-item>
+         <el-menu-item index="4" ><el-link href="\SelfCenter" >个人中心</el-link></el-menu-item>
+       </el-menu>
+       <div class="line"></div>
+     </el-header>
 
       <br>
       <el-row>
@@ -49,7 +52,7 @@
           </div>
         </template>
       </el-footer>
-
+      </el-container>
     </el-container>
   </div>
 </template>
@@ -72,9 +75,6 @@ export default {
     }
   },
   methods:{
-    gotoSelfCenter:function(event){
-      this.$router.push('/SelfCenter')
-    },
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     }
@@ -88,17 +88,14 @@ export default {
 
 
 .el-header {
-  background-color: #B3C0D1;
+  background-color: white;
   color: #333;
   line-height: 60px;
   bottom: 1px;
   width:100%;
-  height:500px;
+  height:5px;
 }
 
-.el-aside {
-  color: #333;
-}
 
 .el-carousel__item h3 {
   color: #475669;
@@ -109,24 +106,7 @@ export default {
   margin: 0;
 }
 
-.el-table{
-  max-height: 1000px;
-}
 
-.el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf;
-  align-self: center;
-}
-
-.el-carousel__item:nth-child(2n+1) {
-  background-color: #d3dce6;
-  align-self: center;
-}
-
-.el-col{
-  text-align: right;
-
-}
 
 .el-footer{
   position:absolute;

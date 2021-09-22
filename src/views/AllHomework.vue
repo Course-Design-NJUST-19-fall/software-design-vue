@@ -9,7 +9,6 @@
                 过去所有作业
               </div>
             </el-col>
-
             <el-col :span="10">
               <div class="grid-content bg-purple-light">
                 <el-link href="\SelfCenterTeacher" >返回个人中心</el-link>
@@ -18,7 +17,6 @@
           </el-row>
         </el-header>
         <br>
-
         <el-main>
           <el-table :data="tableData" style="text-align: center">
             <el-table-column align="center" prop="num" label="序号"   >

@@ -3,7 +3,7 @@
 
 
 
-    <el-container>
+    <el-container style="height: 750px; border: 1px solid #eee">
 
       <div class="line"></div>
       <el-header style="text-align: right; font-size: 12px">

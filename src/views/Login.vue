@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-container>
+    <el-container style="height: 1000px; border: 1px solid #eee">
 
       <el-header style="font-size: 30px">610B Online Judge</el-header>
       <el-main>

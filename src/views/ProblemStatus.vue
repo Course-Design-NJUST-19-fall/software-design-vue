@@ -7,14 +7,14 @@
       <el-header style="text-align: right; font-size: 12px">
         <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
           <el-menu-item index="1"><el-link href="\Main" >主页</el-link></el-menu-item>
-          <el-menu-item index="2"><el-link href="\Login" >题目列表</el-link></el-menu-item>
+          <el-menu-item index="2"><el-link href="\ListProblem" >题目列表</el-link></el-menu-item>
           <el-menu-item index="3" ><el-link href="\ProblemStatus" >提交状态</el-link></el-menu-item>
           <el-menu-item index="4" ><el-link href="\SelfCenter" >个人中心</el-link></el-menu-item>
         </el-menu>
         <div class="line"></div>
       </el-header>
 
-      <el-table :data="tableData" style="text-align: center">
+      <el-table  data="tableData" style="text-align: center">//v-loading="loading" :
         <el-table-column align="center" prop="ProblemId" label="编号"   >
         </el-table-column>
         <el-table-column align="center" prop="ProblemName" label="题目" >
@@ -38,7 +38,7 @@ export default {
     const item = {
       ProblemId: '2',
       ProblemName: '八皇后',
-      Result: 'Accept',
+      Result: '23%(2300/10000)',
       LimitTime:'256ms',
       LimitMemory:'1mb',
     };
@@ -47,7 +47,13 @@ export default {
       activeIndex: '3',
       activeIndex2: '3'
     }
+  },
+  methods:{
+    handleSelect(key, keyPath) {
+      console.log(key, keyPath);
+    }
   }
+
 }
 </script>
 
@@ -60,5 +66,9 @@ export default {
 
 .el-aside {
   color: #333;
+}
+
+body {
+  margin: 0;
 }
 </style>
