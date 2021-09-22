@@ -12,115 +12,94 @@
     </el-menu>
     <div class="line"></div>
   </el-header>
-
+    <el-container>
       <el-container>
-        <el-aside width="400px" style="background-color: rgb(238, 241, 246)">
-          <el-menu :default-openeds="['1','2', '3','4','5','6']">
-            <el-submenu index="1">
-              <template slot="title">青铜</template>
-              <el-menu-item index="1-1">过题数<10,正确率<10%</el-menu-item>
-            </el-submenu>
-            <el-submenu index="2">
-              <template slot="title">白银</template>
-              <el-menu-item index="2-1">10<=过题数<50,    10% < 正确率 < 20%</el-menu-item>
-            </el-submenu>
-            <el-submenu index="3">
-              <template slot="title">黄金</template>
-              <el-menu-item index="3-1">50<=过题数<100,    20%< 正确率 < 30%</el-menu-item>
-            </el-submenu>
-            <el-submenu index="4">
-              <template slot="title">铂金</template>
-              <el-menu-item index="4-1">100<=过题数<500,    30% < 正确率 < 40% </el-menu-item>
-            </el-submenu>
-            <el-submenu index="5">
-              <template slot="title">钻石</template>
-              <el-menu-item index="5-1">500<=过题数<1000,    40% < 正确率 < 50% </el-menu-item>
-            </el-submenu>
-            <el-submenu index="6">
-              <template slot="title">王者</template>
-              <el-menu-item index="6-1">1000 < 过题数 ,    50% < 正确率 </el-menu-item>
-            </el-submenu>
-          </el-menu>
-        </el-aside>
-
-      <el-container>
-
         <el-main>
-          <h2>题目:</h2>
           <div>
-            这里写题目内容
+            <h1 v-html="articless.title"style="width:100%;font-size: 30px;display: block;text-align: center;"></h1>
+            <div style="width:50%;display: inline-block;height: 45px;text-align: end;line-height: 45px;">时间限制：</div>
+            <div v-html="articless.timelimit" style="width:4%;height: 45px;text-align: center;display: inline-block;line-height: 45px;"></div>
+            <div style="width:46%;display: inline-block;height: 45px;line-height: 45px;">MS</div>
+            <div style="width:50%;display: inline-block;height: 45px;text-align: end;line-height: 45px;">空间限制：</div>
+            <div v-html="articless.memorylimit" style="width:5%;height: 45px;text-align: center;display: inline-block;line-height: 45px;"></div>
+            <div style="width:45%;display: inline-block;height: 45px;line-height: 45px;">KB</div>
+            <h3>题目描述：</h3>
+            <div v-html="articless.description"></div>
+            <h3>输入描述：</h3>
+            <div v-html="articless.inputdescription"></div>
+            <h3>输出描述：</h3>
+            <div v-html="articless.outputdescription"></div>
+            <h3>输入样例：</h3>
+            <div v-html="articless.inputsample"></div>
+            <h3>输出样例：</h3>
+            <div v-html="articless.outputsample"></div>
+            <h3>提示/说明：</h3>
+            <div v-html="articless.hint"></div>
           </div>
-          <h2>题目背景</h2>
-          <div>
-            这里写题目背景
-          </div>
-
-          <h2>题目描述</h2>
-          <div>
-            这里写题目描述：
-          </div>
-
-          <h2>输入输出格式</h2>
-
-          <h3>输入格式</h3>
-          <br/>
-
-          <div>
-            这里写输入格式
-          </div>
-
-          <h3>输出格式</h3>
-          <br/>
-
-          <div>
-            这里写输出格式
-          </div>
-
-          <h2>输入输出样例</h2>
-          <h3>输入样例 #1</h3>
-
-          <pre>
-    <code>
-    这里写输入样例
-     </code>
-  </pre>
-
-          <h3>输出样例 #1</h3>
-          <pre>
-    <code>
-    这里写输出样例
-    </code>
-  </pre>
-
-          <h2>说明</h2>
-
-          <div>
-            这边写说明
-          </div>
-
+          <el-row>
+            <div style="width:45%;display: inline-block;text-align: end;" > <el-button type="primary" round @click="goSubmit(problemId)">提交答案</el-button></div>
+            <div style="width:10%;display: inline-block;text-align: end;"></div>
+            <div style="width:45%;display: inline-block;" ><el-button type="primary" round @click="goBack()">返回列表</el-button></div>
+          </el-row>
         </el-main>
       </el-container>
+      </el-container>
+      </el-container>
 
-      </el-container>
-      </el-container>
   </div>
+
 </template>
 
 <script>
+const axios = require('axios');
 export default {
   name: "ShowProblem",
   data() {
     return {
       activeIndex: '5',
-      activeIndex2: '5'
+      problem:null,
+      fromPage:null,
+      articless:null,
+      problemId: null,
     }
   },
   methods:{
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
+    },
+    goSubmit(ProblemId){
+      this.$router.push({
+        path:'/Submit',
+        query:{
+          problemId:ProblemId,
+          fromPage:this.fromPage
+        }
+      })
+    },
+    goBack(){
+      this.$router.push({
+        path:'/ListProblem',
+        query:{
+          currentPage:this.fromPage
+        }
+      })
     }
-  }
+  },
+  created() {
+    const _this=this;
+    this.fromPage=this.$route.query.currentPage;
+    this.problemId=this.$route.query.id;
+    axios.get('http://localhost:8181//problem/findById/'+this.$route.query.id).then(function (resp){
+          _this.problem=resp.data;
+          console.log(resp.data);
+          _this.$http.get(_this.problem.problemPath).then((response) => {
+           _this.articless=response.data;
+           console.log(response.data);
+        })
+    })
 
+
+  }
 }
 </script>
 
