@@ -3,13 +3,15 @@
 
 
     <el-container style="height: 500px; border: 1px solid #eee">
-      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-        <el-menu-item index="1"><el-link href="\Main" >主页</el-link></el-menu-item>
-        <el-menu-item index="2"><el-link href="\ListProblem" >题目列表</el-link></el-menu-item>
-        <el-menu-item index="3" ><el-link href="\ProblemStatus" >提交状态</el-link></el-menu-item>
-        <el-menu-item index="4" ><el-link href="\SelfCenter" >个人中心</el-link></el-menu-item>
-      </el-menu>
-      <div class="line"></div>
+<el-header>
+  <el-menu style="background-color: #B3C0CD" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+    <el-menu-item style="color: #333333" index="1"><el-link href="\Main" >主页</el-link></el-menu-item>
+    <el-menu-item style="color: #333333" index="2"><el-link href="\ListProblem" >题目列表</el-link></el-menu-item>
+    <el-menu-item style="color: #333333" index="3" ><el-link href="\ProblemStatus" >提交状态</el-link></el-menu-item>
+    <el-menu-item style="color: #333333" index="4" ><el-link href="\SelfCenter" >个人中心</el-link></el-menu-item>
+  </el-menu>
+  <div class="line" ></div>
+</el-header>
 
       <el-main>
          <h1>

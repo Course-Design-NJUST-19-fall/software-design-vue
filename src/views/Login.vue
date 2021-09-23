@@ -116,6 +116,7 @@ export default {
   color: #333;
   text-align: center;
   line-height: 60px;
+  font-family: "Arial Black";
 }
 
 .el-aside {

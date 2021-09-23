@@ -3,12 +3,12 @@
 <el-container>
   <el-header>
     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-      <el-menu-item index="1"><el-link href="\Main" >主页</el-link></el-menu-item>
-      <el-menu-item index="2"><el-link href="\ListProblem" >题目列表</el-link></el-menu-item>
-      <el-menu-item index="3" ><el-link href="\ProblemStatus" >提交状态</el-link></el-menu-item>
-      <el-menu-item index="4" ><el-link href="\SelfCenter" >个人中心</el-link></el-menu-item>
-      <el-menu-item index="5" ><el-link type="success" href="\ShowProblem" >题目详情</el-link></el-menu-item>
-      <el-menu-item index="6" ><el-link type="success" href="\Submit" >提交代码</el-link></el-menu-item>
+      <el-menu-item style="color: #333333" index="1"><el-link href="\Main" >主页</el-link></el-menu-item>
+      <el-menu-item style="color: #333333" index="2"><el-link href="\ListProblem" >题目列表</el-link></el-menu-item>
+      <el-menu-item style="color: #333333" index="3" ><el-link href="\ProblemStatus" >提交状态</el-link></el-menu-item>
+      <el-menu-item style="color: #333333" index="4" ><el-link href="\SelfCenter" >个人中心</el-link></el-menu-item>
+      <el-menu-item style="color: #333333" index="5" ><el-link type="success" href="\ShowProblem" >题目详情</el-link></el-menu-item>
+      <el-menu-item style="color: #333333" index="6" ><el-link type="success" href="\Submit" >提交代码</el-link></el-menu-item>
     </el-menu>
     <div class="line"></div>
   </el-header>

@@ -1,14 +1,14 @@
 <template>
 <div>
   <el-container>
-    <el-header style="text-align: right; font-size: 12px">
-      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-        <el-menu-item index="1"><el-link href="\Main" >主页</el-link></el-menu-item>
-        <el-menu-item index="2"><el-link href="\Login" target="_blank">题目列表</el-link></el-menu-item>
-        <el-menu-item index="3" ><el-link href="\ProblemStatus" target="_blank">提交状态</el-link></el-menu-item>
-        <el-menu-item index="4" ><el-link href="\SelfCenter" target="_blank">个人中心</el-link></el-menu-item>
-        <el-menu-item index="5" >  <el-link href="\EditMyself" target="_blank">修改信息</el-link></el-menu-item>
-        <el-menu-item index="6" > <el-link href="\Login" >退出账号</el-link></el-menu-item>
+    <el-header style="background-color: #B3C0CD; text-align: right; font-size: 12px">
+      <el-menu style="background-color: #B3C0CD" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+        <el-menu-item style="color: #333333" index="1"><el-link href="\Main" >主页</el-link></el-menu-item>
+        <el-menu-item style="color: #333333" index="2"><el-link href="\ListProblem"  >题目列表</el-link></el-menu-item>
+        <el-menu-item style="color: #333333" index="3" ><el-link href="\ProblemStatus"  >提交状态</el-link></el-menu-item>
+        <el-menu-item style="color: #333333" index="4" ><el-link href="\SelfCenter"  >个人中心</el-link></el-menu-item>
+        <el-menu-item style="color: #333333" index="5" >  <el-link href="\EditMyself" >修改信息</el-link></el-menu-item>
+        <el-menu-item style="color: #333333" index="6" > <el-link href="\Login" >退出账号</el-link></el-menu-item>
       </el-menu>
       <div class="line"></div>
 
@@ -132,32 +132,7 @@ export default {
 
 <style scoped>
 
-.el-header{
-  background-color: white;
-  color: #333;
-  text-align: center;
-  line-height: 60px;
-}
-.el-footer {
-  background-color: #B3C0D1;
-  color: #333;
-  text-align: center;
-  line-height: 60px;
-}
 
-.el-aside {
-  background-color: #D3DCE6;
-  color: #333;
-  text-align: center;
-  line-height: 200px;
-}
-
-.el-main {
-  background-color: #E9EEF3;
-  color: #333;
-  text-align: center;
-  line-height: 160px;
-}
 
 body > .el-container {
   margin-bottom: 40px;
