@@ -3,28 +3,20 @@
     <el-container>
       <el-header>您正在找回密码</el-header>
       <el-main>
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form :model="account" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 
-          <el-form-item label="用户名" prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
+          <el-form-item label="用户名" prop="id" >
+            <el-input v-model="account.id"readOnly></el-input>
           </el-form-item>
 
-          <el-form-item label="手机号码" prop="phonenumber">
-            <el-input v-model="ruleForm.phonenumber"></el-input>
-          </el-form-item>
-
-          <el-form-item label="用户类型" prop="type">
-            <el-select v-model="ruleForm.type" placeholder="请选择用户类型">
-              <el-option label="我是学生" value="student"></el-option>
-              <el-option label="我是老师" value="teacher"></el-option>
-              <el-option label="我是管理员" value="administrator"></el-option>
-            </el-select>
+          <el-form-item label="手机号码" prop="phoneNumber">
+            <el-input v-model="account.phoneNumber"></el-input>
           </el-form-item>
 
           <el-form-item>
             <el-button v-on:click="gotoLogin">返回登陆页面</el-button>
             <el-button type="primary" @click="submitForm('ruleForm')">找回密码</el-button>
-            <el-button @click="resetForm('ruleForm')">重置信息</el-button>
+            <el-button @click="resetForm('ruleForm')">重置</el-button>
           </el-form-item>
 
         </el-form>
@@ -36,44 +28,26 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "FindMyself",
   data() {
     return {
-      ruleForm: {
-        name: '',
-        password: '',
-        sex: true,
-        birthday: '',
-        phonenumber:'',
-        type: [],
+      account: {
+        id: '',
+        phoneNumber:'',
+        sort: '',
       },
       rules: {
-        name: [
+        id: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { min: 1, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
         ],
 
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
-        ],
-
-        phonenumber: [
+        phoneNumber: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { min: 8, max: 14, message: '长度在 8 到 14 个字符', trigger: 'blur' }
-        ],
-
-        birthday: [
-          { type: 'date', required: true, message: '请选择生日', trigger: 'change' }
-        ],
-
-        sex: [
-          { required: true, message: '请选性别', trigger: 'change' }
-        ],
-
-        type: [
-          { required: true, message: '请选用户类型', trigger: 'change' }
         ],
 
       }
@@ -81,12 +55,55 @@ export default {
   },
 
   methods: {
+    submitForm(fromName){
+      const _this = this;
+      axios.get('http://localhost:8181//account/findById/'+_this.account.id).then(function (resp){
+        console.log(resp);
+        if(resp.data==='') {
+          _this.$message({
+            message:"用户不存在！，请先注册",
+            type:"error"
+          })
+          _this.$router.push({
+              path:'/Signup',
+              query:{
+                id:_this.account.id
+              }
+          })
+        }
+        else {
+          if (_this.account.phoneNumber === resp.data.phoneNumber) {
+            _this.$message({
+              message:"手机号验证成功！",
+              type:"success"
+            })
+            _this.$router.push({
+              path:'/FindPassword',
+              query:{
+                id:_this.account.id,
+                phoneNumber: _this.account.phoneNumber
+              }
+            })
+          } else {
+            _this.$message({
+              message:"手机号不匹配！",
+              type:"error"
+            })
+          }
+        }
+        console.log(resp.data)
+      })
+    },
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
     gotoLogin:function(event){
       this.$router.push('/Login')
     },
+  },
+  created() {
+    this.account.id=this.$route.query.id;
+    this.account.phoneNumber=this.$route.query.phoneNumber;
   }
 }
 </script>

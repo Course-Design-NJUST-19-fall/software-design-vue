@@ -1,37 +1,35 @@
 <template>
   <div>
     <el-container style="height: 800px; border: 1px solid #eee">
-      <el-container>
         <el-header>
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-            <el-menu-item index="1"><el-link href="\Main" >主页</el-link></el-menu-item>
-            <el-menu-item index="2"><el-link href="\ListProblem" >题目列表</el-link></el-menu-item>
-            <el-menu-item index="3" ><el-link href="\ProblemStatus" >提交状态</el-link></el-menu-item>
-            <el-menu-item index="4" ><el-link href="\SelfCenter" >个人中心</el-link></el-menu-item>
-            <el-menu-item index="5" ><el-link type="success" href="\ShowProblem" >题目详情</el-link></el-menu-item>
-            <el-menu-item index="6" ><el-link type="success" href="\Submit" >提交代码</el-link></el-menu-item>
+            <el-menu-item index="1"><el-link @click="goHref('/Main')" >主页</el-link></el-menu-item>
+            <el-menu-item index="2"><el-link @click="goHref('/ListProblem')" target="_blank">题目列表</el-link></el-menu-item>
+            <el-menu-item index="3" ><el-link  @click="goHref('/ProblemStatus')" target="_blank">提交状态</el-link></el-menu-item>
+            <el-menu-item index="4" ><el-link  @click="goHref('/SelfCenter')" target="_blank">个人中心</el-link></el-menu-item>
+            <el-menu-item index="5" ><el-link @click="goHref('/ShowProblem')" >题目详情</el-link></el-menu-item>
+            <el-menu-item index="6" ><el-link @click="goHref('/Submit')" >提交代码</el-link></el-menu-item>
           </el-menu>
           <div class="line"></div>
         </el-header>
+        <p style="text-align: center">用户：{{this.$store.state.userId}}</p>
         <p style="text-align: center">题目：{{problemId}}</p>
-        <p style="text-align: center">代码</p>
         <el-main>
           <div class="main" >
             <codemirror v-model="submitCode" :options="options"></codemirror>
           </div>
-
         </el-main>
         <el-row>
           <div style="width:45%;display: inline-block;text-align: end;" > <el-button type="primary" round  @click="SubmitCode(submitCode)">提交测评</el-button></div>
           <div style="width:10%;display: inline-block;text-align: end;"></div>
           <div style="width:45%;display: inline-block;" ><el-button type="primary" round @click="goBack()" >返回题目</el-button></div>
         </el-row>
-      </el-container>
     </el-container>
   </div>
 </template>
 
 <script>
+import qs from 'qs'
 const axios = require('axios');
 import {codemirror} from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
@@ -71,6 +69,9 @@ export default {
     }
   },
   methods:{
+    goHref(href){
+      this.$router.push(href);
+    },
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },
@@ -83,12 +84,28 @@ export default {
         }
       })
     },
-    SubmitCode(submitCode){
+    SubmitCode(code){
+      let loading = this.$loading({
+        lock:true,
+        text:"提交中，请稍候...",
+        background:'rgba(0,0,0,0.5)'
+      })
           const _this=this;
-          axios.post('http://localhost:8181//problem/judgeProblem/',this.problemId,this.submitCode)
+          axios.post('http://localhost:8181//problem/judgeProblem/', {problemId:this.problemId,submitterId:this.$store.state.userId,code:code}).then(function (resp){
+                console.log(resp);
+                loading.close();
+              _this.$message({
+               message:"提交成功",
+               type:"success"
+              })
+                _this.$router.push('/ProblemStatus');
+          })
     }
   },
   created() {
+    if (sessionStorage.getItem('store')) {
+      this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem('store'))));
+    }
     this.problemId=this.$route.query.problemId;
   }
 }

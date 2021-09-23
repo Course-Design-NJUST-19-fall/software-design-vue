@@ -1,59 +1,42 @@
 <template>
 <div>
-  <el-container>
-    <el-header style="text-align: right; font-size: 12px">
-      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-        <el-menu-item index="1"><el-link href="\Main" >主页</el-link></el-menu-item>
-        <el-menu-item index="2"><el-link href="\Login" target="_blank">题目列表</el-link></el-menu-item>
-        <el-menu-item index="3" ><el-link href="\ProblemStatus" target="_blank">提交状态</el-link></el-menu-item>
-        <el-menu-item index="4" ><el-link href="\SelfCenter" target="_blank">个人中心</el-link></el-menu-item>
-        <el-menu-item index="5" >  <el-link href="\EditMyself" target="_blank">修改信息</el-link></el-menu-item>
-        <el-menu-item index="6" > <el-link href="\Login" >退出账号</el-link></el-menu-item>
+  <el-container style="height: 800px; border: 1px solid #eee">
+    <el-header style="background-color: #B3C0CD; text-align: right; font-size: 12px">
+      <el-menu style="background-color: #B3C0CD" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+        <el-menu-item style="color: #333333" index="1"><el-link @click="goHref('/Main')" >主页</el-link></el-menu-item>
+        <el-menu-item style="color: #333333" index="2"><el-link @click="goHref('/ListProblem')"  >题目列表</el-link></el-menu-item>
+        <el-menu-item style="color: #333333" index="3" ><el-link @click="goHref('/ProblemStatus')"  >提交状态</el-link></el-menu-item>
+        <el-menu-item style="color: #333333" index="4" ><el-link @click="goHref('/SelfCenter')"  >个人中心</el-link></el-menu-item>
+        <el-menu-item style="color: #333333" index="5" >  <el-link @click="goUpdate()" >修改信息</el-link></el-menu-item>
+        <el-menu-item style="color: #333333" index="6" > <el-link @click="goExit()" >退出账号</el-link></el-menu-item>
+
       </el-menu>
       <div class="line"></div>
 
     </el-header>
     <el-main>
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+      <el-form :model="account" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 
-        <el-form-item label="用户名" prop="name">
-          <el-input v-model="ruleForm.name"></el-input>
+        <el-form-item label="用户名" prop="id">
+          <el-input v-model="account.id" readOnly></el-input>
         </el-form-item>
-
         <el-form-item label="密码" prop="password">
-          <el-input v-model="ruleForm.password"></el-input>
+          <el-input v-model="account.password" ></el-input>
         </el-form-item>
-
-        <el-form-item label="手机号码" prop="phonenumber">
-          <el-input v-model="ruleForm.phonenumber"></el-input>
+        <el-form-item label="确认密码" prop="cpwd">
+          <el-input v-model="account.cpwd" ></el-input>
         </el-form-item>
-
-        <el-form-item label="生日" required>
-          <el-col :span="11">
-            <el-form-item prop="birthday">
-              <el-date-picker type="date" placeholder="选择生日" v-model="ruleForm.birthday" style="width: 100%;"></el-date-picker>
-            </el-form-item>
-          </el-col>
+        <el-form-item label="昵称" prop="nicoName">
+          <el-input v-model="account.nicoName"></el-input>
         </el-form-item>
-
-        <el-form-item label="性别" prop="sex">
-          <el-radio-group v-model="ruleForm.sex">
-            <el-radio label="男"></el-radio>
-            <el-radio label="女"></el-radio>
-          </el-radio-group>
-        </el-form-item>
-
-        <el-form-item label="用户类型" prop="type">
-          <el-select v-model="ruleForm.type" placeholder="请选择用户类型">
-            <el-option label="我是学生" value="student"></el-option>
-            <el-option label="我是老师" value="teacher"></el-option>
-          </el-select>
+        <el-form-item label="手机号码" prop="phoneNumber">
+          <el-input v-model="account.phoneNumber"></el-input>
         </el-form-item>
 
         <el-form-item>
-          <el-button v-on:click="gotoSelfCenter">返回登陆页面</el-button>
-          <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-          <el-button @click="resetForm('ruleForm')">重置信息</el-button>
+          <el-button @click="gotoSelfCenter()">返回</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">修改</el-button>
+          <el-button v-on:click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
 
       </el-form>
@@ -63,17 +46,19 @@
 </template>
 
 <script>
+const axios=require('axios');
+
 export default {
   name: "EditMyself",
   data() {
     return {
-      ruleForm: {
-        name: '',
+      url:null,
+      account: {
+        id: '',
         password: '',
-        sex: true,
-        birthday: '',
-        phonenumber:'',
-        type: [],
+        nicoName:'',
+        cpwd:'',
+        phoneNumber:'',
       },
       rules: {
         name: [
@@ -86,78 +71,88 @@ export default {
           { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
         ],
 
-        phonenumber: [
+        phoneNumber: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { min: 8, max: 14, message: '长度在 8 到 14 个字符', trigger: 'blur' }
         ],
-
-        birthday: [
-          { type: 'date', required: true, message: '请选择生日', trigger: 'change' }
-        ],
-
-        sex: [
-          { required: true, message: '请选性别', trigger: 'change' }
-        ],
-
-        type: [
-          { required: true, message: '请选用户类型', trigger: 'change' }
-        ],
-
+        cpwd:[{required:true,message:'确认密码',trigger:'blur'},
+          {
+            validator:(rule,value,callback)=>{
+              if(value===''){
+                callback(new Error('请再次输入密码'))
+              }else if(value!==this.account.password){
+                callback(new Error('两次输入密码不一致'))
+              }else{
+                callback( )
+              }
+            },
+            trigger:'blur'
+          }],
+        nicoName: [
+          { required: false, message: '请输入密码', trigger: 'blur' },
+          { min: 0, max: 20, message: '长度在 0 到 20 个字符', trigger: 'blur' }
+        ]
       },
       activeIndex: '5',
-      activeIndex2: '5',
     };
   },
 
   methods: {
+    gotoSelfCenter(){
+      this.$router.push('/SelfCenter');
+    },
+    goHref(href){
+      this.$router.push(href);
+    },
+    goUpdate(){
+      this.$router.push({
+        path:'/EditMyself',
+        query:{
+          id:this.account.id
+        }
+      });
+    },
+    goExit(){
+      this.$store.commit('update',['userId',null])
+      sessionStorage.setItem('store',JSON.stringify(this.$store.state))
+      this.$router.push('/Main')
+    },
     submitForm(formName) {
+      const _this = this;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!');
+          axios.put('http://localhost:8181//account/updated', this.account).then(function (resp) {
+            console.log(resp.data);
+            if (resp.data) {
+              _this.$message({
+                message:_this.account.id + '  修改成功！',
+                type:"success"
+              })
+              _this.$router.push(_this.url)
+            }
+          })
         } else {
-          console.log('error submit!!');
           return false;
         }
       });
     },
-    gotoSelfCenter:function(event){
-      this.$router.push('/SelfCenter')
+    handleSelect(key, keyPath) {
+      console.log(key, keyPath);
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
     }
+  },
+  created() {
+    this.account=this.$route.query.account;
+    this.url=this.$route.path;
   }
 }
 </script>
 
 <style scoped>
 
-.el-header{
-  background-color: white;
-  color: #333;
-  text-align: center;
-  line-height: 60px;
-}
-.el-footer {
-  background-color: #B3C0D1;
-  color: #333;
-  text-align: center;
-  line-height: 60px;
-}
 
-.el-aside {
-  background-color: #D3DCE6;
-  color: #333;
-  text-align: center;
-  line-height: 200px;
-}
-
-.el-main {
-  background-color: #E9EEF3;
-  color: #333;
-  text-align: center;
-  line-height: 160px;
-}
 
 body > .el-container {
   margin-bottom: 40px;

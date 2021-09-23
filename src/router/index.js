@@ -16,6 +16,7 @@ import AllHomework from '../views/AllHomework.vue'
 import AddProblem from '../views/AddProblem.vue'
 import UserList from '../views/UserList.vue'
 import Main from '../views/Main.vue'
+import FindPassword from "@/views/FindPassword";
 
 Vue.use(VueRouter)
 
@@ -23,7 +24,7 @@ const routes = [
   {
     path: '/',
     name: 'Index',
-    redirect: {name:"Login"}
+    redirect: {name:"Main"}
   },
   {
     path: '/Login',
@@ -105,6 +106,11 @@ const routes = [
     path: '/Submit',
     name: 'Submit',
     component: Submit
+  },
+  {
+    path:'/FindPassword',
+    name:'FindPassword',
+    component: FindPassword
   }
 
 ]

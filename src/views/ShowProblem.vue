@@ -1,14 +1,15 @@
 <template>
   <div>
-<el-container>
-  <el-header>
-    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-      <el-menu-item index="1"><el-link href="\Main" >主页</el-link></el-menu-item>
-      <el-menu-item index="2"><el-link href="\ListProblem" >题目列表</el-link></el-menu-item>
-      <el-menu-item index="3" ><el-link href="\ProblemStatus" >提交状态</el-link></el-menu-item>
-      <el-menu-item index="4" ><el-link href="\SelfCenter" >个人中心</el-link></el-menu-item>
-      <el-menu-item index="5" ><el-link type="success" href="\ShowProblem" >题目详情</el-link></el-menu-item>
-      <el-menu-item index="6" ><el-link type="success" href="\Submit" >提交代码</el-link></el-menu-item>
+    <el-container style="height: 800px; border: 1px solid #eee">
+     <el-header style=" background-color: #B3C0CD; text-align: right; font-size: 12px;">
+
+       <el-menu style="background-color: #B3C0CD" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+      <el-menu-item style="color: #333333" index="1"><el-link @click="goHref('/Main')" >主页</el-link></el-menu-item>
+      <el-menu-item style="color: #333333" index="2"><el-link @click="goHref('/ListProblem')" >题目列表</el-link></el-menu-item>
+      <el-menu-item style="color: #333333" index="3" ><el-link @click="goHref('/ProblemStatus')" >提交状态</el-link></el-menu-item>
+      <el-menu-item style="color: #333333" index="4" ><el-link @click="goHref('/SelfCenter')" >个人中心</el-link></el-menu-item>
+      <el-menu-item style="color: #333333" index="5" ><el-link type="success" @click="goHref('/ShowProblem')" >题目详情</el-link></el-menu-item>
+      <el-menu-item style="color: #333333" index="6" ><el-link type="success" @click="goHref('/Submit')" >提交代码</el-link></el-menu-item>
     </el-menu>
     <div class="line"></div>
   </el-header>
@@ -64,17 +65,30 @@ export default {
     }
   },
   methods:{
+    goHref(href){
+      this.$router.push(href);
+    },
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },
     goSubmit(ProblemId){
-      this.$router.push({
-        path:'/Submit',
-        query:{
-          problemId:ProblemId,
-          fromPage:this.fromPage
-        }
-      })
+      const _this=this;
+      if(this.$store.state.userId==null) {
+        _this.$message({
+          message:"请先登录账户",
+          type:"error"
+        })
+        this.$router.push('/Login');
+      }
+      else {
+        this.$router.push({
+          path: '/Submit',
+          query: {
+            problemId: ProblemId,
+            fromPage: this.fromPage
+          }
+        })
+      }
     },
     goBack(){
       this.$router.push({
@@ -86,6 +100,9 @@ export default {
     }
   },
   created() {
+    if (sessionStorage.getItem('store')) {
+      this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem('store'))));
+    }
     const _this=this;
     this.fromPage=this.$route.query.currentPage;
     this.problemId=this.$route.query.id;

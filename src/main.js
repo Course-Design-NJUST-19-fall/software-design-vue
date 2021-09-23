@@ -5,7 +5,8 @@ import store from './store'
 import axios from 'axios'
 import './plugins/element.js'
 import VueParticles from 'vue-particles'
-import Prism from "prismjs"
+
+Vue.prototype.$store=store
 Vue.use(VueParticles)
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios

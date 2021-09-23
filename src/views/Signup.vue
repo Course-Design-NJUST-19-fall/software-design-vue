@@ -3,46 +3,36 @@
     <el-container>
       <el-header style="font-size: 30px">您正在注册账号</el-header>
       <el-main>
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form :model="account" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 
-          <el-form-item label="用户名" prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
+          <el-form-item label="用户名" prop="id">
+            <el-input v-model="account.id"></el-input>
           </el-form-item>
 
           <el-form-item label="密码" prop="password">
-            <el-input v-model="ruleForm.password"></el-input>
+            <el-input v-model="account.password" type="password"></el-input>
+          </el-form-item>
+          <el-form-item label="确认密码" prop="cpwd">
+            <el-input v-model="account.cpwd" type="password"></el-input>
+          </el-form-item>
+          <el-form-item label="昵称" prop="nicoName">
+            <el-input v-model="account.nicoName"></el-input>
+          </el-form-item>
+          <el-form-item label="手机号码" prop="phoneNumber">
+            <el-input v-model="account.phoneNumber"></el-input>
           </el-form-item>
 
-          <el-form-item label="手机号码" prop="phonenumber">
-            <el-input v-model="ruleForm.phonenumber"></el-input>
-          </el-form-item>
-
-          <el-form-item label="生日" required>
-            <el-col :span="11">
-              <el-form-item prop="birthday">
-                <el-date-picker type="date" placeholder="选择生日" v-model="ruleForm.birthday" style="width: 100%;"></el-date-picker>
-              </el-form-item>
-            </el-col>
-          </el-form-item>
-
-          <el-form-item label="性别" prop="sex">
-            <el-radio-group v-model="ruleForm.sex">
-              <el-radio label="男"></el-radio>
-              <el-radio label="女"></el-radio>
+          <el-form-item label="用户类别" prop="sort">
+            <el-radio-group v-model="account.sort">
+              <el-radio label="学生"></el-radio>
+              <el-radio label="老师"></el-radio>
             </el-radio-group>
-          </el-form-item>
-
-          <el-form-item label="用户类型" prop="type">
-            <el-select v-model="ruleForm.type" placeholder="请选择用户类型">
-              <el-option label="我是学生" value="student"></el-option>
-              <el-option label="我是老师" value="teacher"></el-option>
-            </el-select>
           </el-form-item>
 
           <el-form-item>
             <el-button v-on:click="gotoLogin">返回登录界面</el-button>
-            <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-            <el-button @click="resetForm('ruleForm')">重置信息</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm')">创建</el-button>
+            <el-button @click="resetForm('ruleForm')">重置</el-button>
           </el-form-item>
 
         </el-form>
@@ -53,20 +43,21 @@
 </template>
 
 <script>
+const axios=require('axios')
 export default {
   name: "Signup" ,
   data() {
     return {
-      ruleForm: {
-        name: '',
+      account: {
+        id: '',
         password: '',
-        sex: true,
-        birthday: '',
-        phonenumber:'',
-        type: [],
+        cpwd:'',
+        nicoName: '',
+        phoneNumber:'',
+        sort:''
       },
       rules: {
-        name: [
+        id: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { min: 1, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
         ],
@@ -75,21 +66,28 @@ export default {
           { required: true, message: '请输入密码', trigger: 'blur' },
           { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
         ],
-
-        phonenumber: [
+        cpwd:[{required:true,message:'确认密码',trigger:'blur'},
+          {
+          validator:(rule,value,callback)=>{
+            if(value===''){
+              callback(new Error('请再次输入密码'))
+            }else if(value!==this.account.password){
+              callback(new Error('两次输入密码不一致'))
+            }else{
+              callback( )
+            }
+          },
+          trigger:'blur'
+        }],
+        nicoName: [
+          { required: false, message: '请输入密码', trigger: 'blur' },
+          { min: 0, max: 20, message: '长度在 0 到 20 个字符', trigger: 'blur' }
+        ],
+        phoneNumber: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { min: 8, max: 14, message: '长度在 8 到 14 个字符', trigger: 'blur' }
         ],
-
-        birthday: [
-          { type: 'date', required: true, message: '请选择生日', trigger: 'change' }
-        ],
-
-        sex: [
-          { required: true, message: '请选性别', trigger: 'change' }
-        ],
-
-        type: [
+        sort: [
           { required: true, message: '请选用户类型', trigger: 'change' }
         ],
 
@@ -99,11 +97,33 @@ export default {
 
   methods: {
     submitForm(formName) {
+      const _this=this;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!');
-        } else {
-          console.log('error submit!!');
+          axios.post('http://localhost:8181//account/save',this.account).then(function (resp){
+            console.log(resp);
+            if(resp.data==='SUCCESS'){
+              _this.$message({
+                message:_this.account.id+"  添加成功！",
+                type:"success"
+              })
+              _this.$router.push('/Login')
+            }
+            else if(resp.data === "ERROR") {
+              _this.$message({
+                message:"添加失败！",
+                type:"error"
+              })
+            }
+            else {
+              _this.$message({
+                message:_this.account.id + ' 已经存在!',
+                type:"warning"
+              })
+            }
+          })
+        }
+        else{
           return false;
         }
       });

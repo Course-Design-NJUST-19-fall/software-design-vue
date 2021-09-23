@@ -1,29 +1,24 @@
 <template>
   <div>
-    <el-container style="height: 700px; border: 1px solid #eee">
-
-
-      <el-container>
-       <el-header style="color: white; height: 60px;">
-       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-         <el-menu-item index="1"><el-link href="\Main" >主页</el-link></el-menu-item>
-         <el-menu-item index="2"><el-link href="\ListProblem" >题目列表</el-link></el-menu-item>
-         <el-menu-item index="3" ><el-link href="\ProblemStatus" >提交状态</el-link></el-menu-item>
-         <el-menu-item index="4" ><el-link href="\SelfCenter" >个人中心</el-link></el-menu-item>
+    <el-container style="border: 1px solid #eee">
+       <el-header style="background-color: #B3C0CD; height: 60px;">
+       <el-menu style="background-color: #B3C0CD" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+         <el-menu-item style="color: #333333" index="1"><el-link  @click="goHref('/Main')" >主页</el-link></el-menu-item>
+         <el-menu-item style="color: #333333" index="2"><el-link @click="goHref('/ListProblem')" >题目列表</el-link></el-menu-item>
+         <el-menu-item style="color: #333333" index="3" ><el-link @click="goHref('/ProblemStatus')" >提交状态</el-link></el-menu-item>
+         <el-menu-item style="color: #333333" index="4" ><el-link @click="goHref('/SelfCenter')" >个人中心</el-link></el-menu-item>
        </el-menu>
        <div class="line"></div>
      </el-header>
-      <br>
-      <el-row>
-        <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="6"><div class="grid-content bg-purple-light">
-          <el-input v-model="input" placeholder="请输入题号"></el-input></div></el-col><el-button type="primary" icon="el-icon-search">搜索</el-button>
-      </el-row>
-
-        <el-table :data="tableData" style="text-align: center;height: 40px;">
+<!--      <el-row>-->
+<!--        <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>-->
+<!--        <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>-->
+<!--        <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>-->
+<!--        <el-col :span="4"><div class="grid-content bg-purple"></div></el-col>-->
+<!--        <el-col :span="6"><div class="grid-content bg-purple-light">-->
+<!--          <el-input v-model="input" placeholder="请输入题号"></el-input></div></el-col><el-button type="primary" icon="el-icon-search">搜索</el-button>-->
+<!--      </el-row>-->
+        <el-table :data="tableData" style="text-align: center;font-size: 15px;">
           <el-table-column
               fixed
               align="center"
@@ -80,14 +75,14 @@
             @current-change="page"
         >
         </el-pagination>
-      </el-container>
-    </el-container>
+     </el-container>
   </div>
 </template>
 
 <script>
 const axios = require('axios');
 export default {
+
   name: "ListProblem",
   data() {
     return {
@@ -97,6 +92,9 @@ export default {
     }
   },
   methods:{
+    goHref(href){
+      this.$router.push(href);
+    },
     goProblem(row){
       this.$router.push({
         path:'/ShowProblem',
@@ -124,6 +122,9 @@ export default {
     }
   },
   created(){
+    if (sessionStorage.getItem('store')) {
+      this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem('store'))));
+    }
     const _this=this;
     let CurrentPage= this.$route.query.currentPage;
     if(CurrentPage==null)CurrentPage=1;
@@ -139,18 +140,9 @@ export default {
 </script>
 
 <style>
-
-
-
-.el-header {
-  background-color: white;
-  color: #333;
-  line-height: 60px;
-  bottom: 1px;
-  width:100%;
-  height:5px;
+.el-header{
+  background: white;
 }
-
 
 .el-carousel__item h3 {
   color: #475669;
@@ -159,6 +151,11 @@ export default {
   line-height: 150px;
   align-self: center;
   margin: 0;
+}
+
+.el-menu-demo{
+  background: #475669;
+  color: white;
 }
 
 

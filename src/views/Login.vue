@@ -6,26 +6,18 @@
       <el-main>
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 
-          <el-form-item label="用户名" prop="name">
-            <el-input v-model="ruleForm.name"></el-input>
+          <el-form-item label="用户名" prop="id">
+            <el-input v-model="ruleForm.id"></el-input>
           </el-form-item>
 
           <el-form-item label="密码" prop="password">
-            <el-input v-model="ruleForm.password"></el-input>
-          </el-form-item>
-
-          <el-form-item label="用户类型" prop="type">
-            <el-select v-model="ruleForm.type" placeholder="请选择用户类型">
-              <el-option label="我是学生" value="student"></el-option>
-              <el-option label="我是老师" value="teacher"></el-option>
-              <el-option label="我是管理员" value="administrator"></el-option>
-            </el-select>
+            <el-input v-model="ruleForm.password" type="password"></el-input>
           </el-form-item>
 
           <el-form-item>
             <el-button  v-on:click="gotoSignup">注册账号</el-button>
             <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-            <el-button  v-on:click="gotoFindMyself">忘记密码</el-button>
+            <el-button @click="gotoFindMyself()">忘记密码</el-button>
           </el-form-item>
 
         </el-form>
@@ -33,51 +25,28 @@
     </el-container>
 
 
-
   </div>
 </template>
 
 <script>
+const axios = require('axios');
 export default {
   name: "Login",
   data() {
     return {
       ruleForm: {
-        name: '',
-        password: '',
-        sex: true,
-        birthday: '',
-        phonenumber:'',
-        type: [],
+        id:null,
+        password: null,
       },
       rules: {
-        name: [
+        id: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 1, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+          { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
         ],
-
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
           { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
         ],
-
-        phonenumber: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 8, max: 14, message: '长度在 8 到 14 个字符', trigger: 'blur' }
-        ],
-
-        birthday: [
-          { type: 'date', required: true, message: '请选择生日', trigger: 'change' }
-        ],
-
-        sex: [
-          { required: true, message: '请选性别', trigger: 'change' }
-        ],
-
-        type: [
-          { required: true, message: '请选用户类型', trigger: 'change' }
-        ],
-
       }
     };
   },
@@ -88,24 +57,47 @@ export default {
     },
 
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!');
-        } else {
-          console.log('error submit!!');
-          return false;
-        }
-      });
-      this.$router.push('/ListProblem')
+      const _this=this;
+      axios.get('http://localhost:8181//account/signIn/'+this.ruleForm.id+'/'+this.ruleForm.password).then(function (resp){
+               console.log(resp.data);
+               if(resp.data!=null){
+                 _this.$message({
+                   message:"登录成功!",
+                   type:"success"
+                 })
+                 _this.$store.commit('update',['userId',_this.ruleForm.id])
+                 sessionStorage.setItem('store',JSON.stringify(_this.$store.state))
+                 if(resp.data=='学生')
+                 _this.$router.push('/SelfCenter');
+                 else if(resp=='老师')
+                   _this.$router.push('/SelfCenterTeacher');
+                 else _this.$router.push('/SelfCenterAdmin')
+               }
+               else {
+                 _this.$message({
+                   message:"账号不存在或密码错误!",
+                   type:"error"
+                 })
+               }
+          })
     },
 
     gotoSignup:function(event){
       this.$router.push('/Signup')
     },
-    gotoFindMyself:function(event){
-      this.$router.push('/FindMyself')
+    gotoFindMyself(){
+      const _this=this;
+      this.$router.push({
+          path:'/FindMyself',
+         query:{
+            id:this.ruleForm.id
+         }
+      })
     }
-
+  },
+  created() {
+    this.$store.commit('update',['userId',null])
+    sessionStorage.setItem('store',JSON.stringify(this.$store.state))
   }
 }
 </script>
@@ -116,6 +108,7 @@ export default {
   color: #333;
   text-align: center;
   line-height: 60px;
+  font-family: "Arial Black";
 }
 
 .el-aside {
