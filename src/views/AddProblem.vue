@@ -9,37 +9,52 @@
             </div>
           </el-col>
 
-          <el-col :span="11">
+          <el-col :span="10">
             <div class="grid-content bg-purple-light">
-              <el-link href="\SelfCenterAdmin" target="_blank">个人中心</el-link>
+              <el-link @click="goHref('/SelfCenterAdmin')">返回管理中心</el-link>
             </div>
           </el-col>
         </el-row>
       </el-header>
       <el-main>
-        <el-form :model="form"  ref="ruleForm" label-width="100px" class="demo-form">
-          <el-form-item label="序号" >
-            <el-input v-model="form.AddProblemId"></el-input>
+        <el-form :model="problem"  ref="ruleForm" :rules="rules" label-width="110px" class="demo-form">
+
+          <el-form-item label="题目名称" prop="problemName">
+            <el-input v-model="problem.problemName"></el-input>
           </el-form-item>
 
-          <el-form-item label="题目名称" >
-            <el-input v-model="form.AddProblemName"></el-input>
+          <el-form-item label="时间限制(ms)" prop="cpuTimeLimit">
+            <el-input v-model="problem.cpuTimeLimit"></el-input>
           </el-form-item>
 
-          <el-form-item label="时间限制" >
-            <el-input v-model="form.AddProblemLimitTime"></el-input>
+          <el-form-item label="内存限制(kb)" prop="memoryLimit">
+            <el-input v-model="problem.memoryLimit"></el-input>
           </el-form-item>
 
-          <el-form-item label="内存限制" >
-            <el-input v-model="form.AddProblemLimitMemory"></el-input>
+          <el-form-item label="题目难度" prop="rating">
+            <el-select v-model="problem.rating" placeholder="请选择题目难度">
+              <el-option label="简单" value="1"></el-option>
+              <el-option label="较简单" value="2"></el-option>
+              <el-option label="一般" value="3"></el-option>
+              <el-option label="较困难" value="4"></el-option>
+              <el-option label="困难" value="5"></el-option>
+            </el-select>
           </el-form-item>
 
-          <el-form-item label="文件路径" >
-            <el-input v-model="form.AddProblemPath"></el-input>
+          <el-form-item label="题面文件路径" prop="problemPath">
+            <el-input v-model="problem.problemPath"></el-input>
+          </el-form-item>
+
+          <el-form-item label="输入文件路径" prop="inputPath">
+            <el-input v-model="problem.inputPath"></el-input>
+          </el-form-item>
+
+          <el-form-item label="输出文件路径" prop="outputPath">
+            <el-input v-model="problem.outputPath"></el-input>
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" >确认</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm')">确认</el-button>
           </el-form-item>
 
         </el-form>
@@ -57,19 +72,74 @@ export default {
   name: "AddProblem",
   data() {
     return {
-      form: {
-        AddProblemId: '',
-        AddProblemName:'',
-        AddProblemLimitTime: '',
-        AddProblemLimitMemory: '',
-        AddProblemPath: '',
+      problem: {
+        problemName:null,
+        problemPath:null,
+        cpuTimeLimit: null,
+        memoryLimit: null,
+        inputPath: null,
+        outputPath:null,
+        rating:null
+      },
+      rules: {
+        problemName:[
+          { required: true, message: '请输入题目名称', trigger: 'blur' },
+          { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
+        ],
+        problemPath:[
+          { required: true, message: '请输入输入文件路径', trigger: 'blur' },
+        ],
+        inputPath: [
+          { required: true, message: '请输入输入文件路径', trigger: 'blur' },
+        ],
+        outputPath: [
+          { required: true, message: '请输入输出文件路径', trigger: 'blur' },
+        ],
+        cpuTimeLimit:[
+          { required: true, message: '请输入时间限制', trigger: 'blur' },
+        ],
+        memoryLimit:[
+          { required: true, message: '请输入空间限制', trigger: 'blur' },
+        ],
+        rating: [
+          { required: true, message: '请选则题目难度', trigger: 'change' }
+        ],
+
       }
     }
   },
   methods: {
+    goHref(href){
+      this.$router.push(href);
+    },
     onSubmit() {
       console.log('submit!');
-    }
+    },
+    submitForm(formName) {
+      const _this=this;
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          axios.post('http://localhost:8181//problem/save',this.problem).then(function (resp){
+            console.log(resp);
+            if(resp.data){
+              _this.$message({
+                message:_this.problem.problemName+"  添加成功！",
+                type:"success"
+              })
+            }
+            else {
+              _this.$message({
+                message:"添加失败！",
+                type:"error"
+              })
+            }
+          })
+        }
+        else{
+          return false;
+        }
+      });
+    },
   }
 
 }

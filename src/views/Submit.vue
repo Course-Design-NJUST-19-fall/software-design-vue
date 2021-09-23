@@ -2,28 +2,28 @@
   <div>
     <el-container style="height: 800px; border: 1px solid #eee">
         <el-header>
-          <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-            <el-menu-item index="1"><el-link @click="goHref('/Main')" >主页</el-link></el-menu-item>
-            <el-menu-item index="2"><el-link @click="goHref('/ListProblem')" target="_blank">题目列表</el-link></el-menu-item>
-            <el-menu-item index="3" ><el-link  @click="goHref('/ProblemStatus')" target="_blank">提交状态</el-link></el-menu-item>
-            <el-menu-item index="4" ><el-link  @click="goHref('/SelfCenter')" target="_blank">个人中心</el-link></el-menu-item>
-            <el-menu-item index="5" ><el-link @click="goHref('/ShowProblem')" >题目详情</el-link></el-menu-item>
-            <el-menu-item index="6" ><el-link @click="goHref('/Submit')" >提交代码</el-link></el-menu-item>
+          <el-menu style="background-color: #B3C0CD" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+          <el-menu-item style="color: #333333" index="1"><el-link @click="goHref('/Main')" >主页</el-link></el-menu-item>
+            <el-menu-item style="color: #333333" index="2"><el-link @click="goHref('/ListProblem')" >题目列表</el-link></el-menu-item>
+            <el-menu-item style="color: #333333" index="3" ><el-link @click="goHref('/ProblemStatus')" >提交状态</el-link></el-menu-item>
+            <el-menu-item style="color: #333333" index="4" ><el-link @click="goCenter()" >个人中心</el-link></el-menu-item>
+            <el-menu-item style="color: #333333" index="5" ><el-link @click="goBack()" >题目详情</el-link></el-menu-item>
+            <el-menu-item style="color: #333333" index="6" ><el-link @click="goHref('/Submit')" >提交代码</el-link></el-menu-item>
           </el-menu>
           <div class="line"></div>
         </el-header>
-        <p style="text-align: center">用户：{{this.$store.state.userId}}</p>
-        <p style="text-align: center">题目：{{problemId}}</p>
         <el-main>
+          <p style="text-align: center">用户：{{this.$store.state.userId}}</p>
+          <p style="text-align: center">题目编号：{{problemId}}</p>
           <div class="main" >
             <codemirror v-model="submitCode" :options="options"></codemirror>
           </div>
         </el-main>
-        <el-row>
-          <div style="width:45%;display: inline-block;text-align: end;" > <el-button type="primary" round  @click="SubmitCode(submitCode)">提交测评</el-button></div>
-          <div style="width:10%;display: inline-block;text-align: end;"></div>
-          <div style="width:45%;display: inline-block;" ><el-button type="primary" round @click="goBack()" >返回题目</el-button></div>
-        </el-row>
+      <el-row>
+        <div style="width:45%;display: inline-block;text-align: end;" > <el-button type="primary" round  @click="SubmitCode(submitCode)">提交测评</el-button></div>
+        <div style="width:10%;display: inline-block;text-align: end;"></div>
+        <div style="width:45%;display: inline-block;" ><el-button type="primary" round @click="goBack()" >返回题目</el-button></div>
+      </el-row>
     </el-container>
   </div>
 </template>
@@ -69,6 +69,31 @@ export default {
     }
   },
   methods:{
+    goCenter(){
+      if (sessionStorage.getItem('store')) {
+        this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem('store'))));
+      }
+      const _this=this;
+      if(this.$store.state.userId==null){
+        _this.$message({
+          message:"请登录",
+          type:"error"
+        })
+        this.$router.push('/Login');
+      }
+      else {
+        axios.get('http://localhost:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
+          _this.account=resp.data;
+          console.log(resp.data)
+          if(_this.account.sort==='学生')
+            _this.$router.push('/SelfCenter');
+          else if(_this.account.sort==='老师')
+            _this.$router.push('/SelfCenterTeacher');
+          else if(_this.account.sort==='管理员')
+            _this.$router.push('/SelfCenterAdmin');
+        })
+      }
+    },
     goHref(href){
       this.$router.push(href);
     },

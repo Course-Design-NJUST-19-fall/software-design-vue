@@ -3,50 +3,23 @@
 
 
 
-    <el-container>
-      <el-header style="background-color: #B3C0CD; text-align: right; font-size: 12px">
+    <el-container style="height: 800px; border: 1px solid #eee">
+      <el-header style=" background-color: #B3C0CD; text-align: right; font-size: 12px;">
+
         <el-menu style="background-color: #B3C0CD" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-          <el-menu-item style="color: #333333" index="1"><el-link   href="\Main" >主页</el-link></el-menu-item>
-          <el-menu-item style="color: #333333" index="2"><el-link  href="\ListProblem" >题目列表</el-link></el-menu-item>
-          <el-menu-item style="color: #333333" index="3" ><el-link  href="\ProblemStatus" >提交状态</el-link></el-menu-item>
-          <el-menu-item style="color: #333333" index="4" ><el-link  href="\SelfCenterAdmin" >个人中心</el-link></el-menu-item>
-          <el-menu-item style="color: #333333" index="5" > <el-link  href="\Login" >退出账号</el-link></el-menu-item>
+          <el-menu-item style="color: #333333" index="1"><el-link @click="goHref('/Main')" >主页</el-link></el-menu-item>
+          <el-menu-item style="color: #333333" index="2"><el-link @click="goHref('/ListProblem')" >题目列表</el-link></el-menu-item>
+          <el-menu-item style="color: #333333" index="3" ><el-link @click="goHref('/ProblemStatus')" >提交状态</el-link></el-menu-item>
+          <el-menu-item style="color: #333333" index="4" ><el-link @click="goCenter()" >个人中心</el-link></el-menu-item>
+          <el-menu-item style="color: #333333" index="6" >  <el-link  @click="goUpdate()" >修改信息</el-link></el-menu-item>
+          <el-menu-item style="color: #333333" index="5" > <el-link @click="goExit()" >退出账号</el-link></el-menu-item>
         </el-menu>
         <div class="line"></div>
+
       </el-header>
       <el-container>
-        <el-aside width="400px" style="background-color: rgb(238, 241, 246)">
-          <el-menu :default-openeds="['1','2', '3','4','5','6']">
-            <el-submenu index="1">
-              <template slot="title">青铜</template>
-              <el-menu-item index="1-1">过题数<10,正确率<10%</el-menu-item>
-            </el-submenu>
-            <el-submenu index="2">
-              <template slot="title">白银</template>
-              <el-menu-item index="2-1">10<=过题数<50,    10% < 正确率 < 20%</el-menu-item>
-            </el-submenu>
-            <el-submenu index="3">
-              <template slot="title">黄金</template>
-              <el-menu-item index="3-1">50<=过题数<100,    20%< 正确率 < 30%</el-menu-item>
-            </el-submenu>
-            <el-submenu index="4">
-              <template slot="title">铂金</template>
-              <el-menu-item index="4-1">100<=过题数<500,    30% < 正确率 < 40% </el-menu-item>
-            </el-submenu>
-            <el-submenu index="5">
-              <template slot="title">钻石</template>
-              <el-menu-item index="5-1">500<=过题数<1000,    40% < 正确率 < 50% </el-menu-item>
-            </el-submenu>
-            <el-submenu index="6">
-              <template slot="title">王者</template>
-              <el-menu-item index="6-1">1000 < 过题数 ,    50% < 正确率 </el-menu-item>
-            </el-submenu>
-
-          </el-menu>
-        </el-aside>
         <el-main>
-          <el-descriptions title="管理用户" direction="vertical" :column="2" border>
-            <el-descriptions-item label="题目列表" ><el-link href="\ListProblem"  type="primary">查看题目列表</el-link></el-descriptions-item><br>
+          <el-descriptions title="题目管理" direction="vertical" :column="2" border>
             <el-descriptions-item label="增加" ><el-link href="\AddProblem"  type="primary">新增题目</el-link></el-descriptions-item><br>
             <el-descriptions-item label="删除" >
               <el-button type="text" @click="delProblem">删除题目</el-button>
@@ -70,27 +43,91 @@
 </template>
 
 <script>
+const axios =require('axios');
+
 export default {
   name: "SelfCenterAdmin",
   data() {
     return {
       activeIndex: '4',
-      activeIndex2: '4'
+      account: {
+        id:null,
+        password:null,
+        nicoName:null,
+        sort:null,
+        phoneNumber:null,
+        listenMessage:null,
+        submitNumber:null,
+        acceptNumber:null,
+        rating:null
+      }
     }
   },
   methods: {
+    goCenter(){
+      if (sessionStorage.getItem('store')) {
+        this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem('store'))));
+      }
+      const _this=this;
+      if(this.$store.state.userId==null){
+        _this.$message({
+          message:"请登录",
+          type:"error"
+        })
+        this.$router.push('/Login');
+      }
+      else {
+        axios.get('http://localhost:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
+          _this.account=resp.data;
+          console.log(resp.data)
+          if(_this.account.sort==='学生')
+            _this.$router.push('/SelfCenter');
+          else if(_this.account.sort==='老师')
+            _this.$router.push('/SelfCenterTeacher');
+          else if(_this.account.sort==='管理员')
+            _this.$router.push('/SelfCenterAdmin');
+        })
+      }
+    },
+    goHref(href){
+      this.$router.push(href);
+    },
+    goUpdate(){
+      this.$router.push({
+        path:'/EditMyself',
+        query:{
+          account:this.account,
+          url:this.$route.path
+        }
+      });
+    },
+    goExit(){
+      this.$store.commit('update',['userId',null])
+      sessionStorage.setItem('store',JSON.stringify(this.$store.state))
+      this.$router.push('/Main')
+    },
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },
     delProblem() {
+      const _this=this;
       this.$prompt('请输入将要删除的题号', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
       }).then(({ value }) => {
-        this.$message({
-          type: 'success',
-          message: '已删除题目: ' + value
-        });
+        axios.delete('http://localhost:8181//problem/deleteById/'+value).then(function (resp){
+            if(resp.data){
+              _this.$message({
+                type: 'success',
+                message: '已删除题目: ' + value
+              });
+            }else{
+              _this.$message({
+                type: 'error',
+                message: '删除失败'
+              });
+            }
+        })
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -100,14 +137,24 @@ export default {
     },
 
     delUser() {
+      const _this=this;
       this.$prompt('请输入违规用户的账号', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
       }).then(({ value }) => {
-        this.$message({
-          type: 'success',
-          message: '已删除违规用户的账号: ' + value
-        });
+        axios.delete('http://localhost:8181//account/deleteById/'+value).then(function (resp){
+          if(resp.data){
+            _this.$message({
+              type: 'success',
+              message: '已删除违规用户: ' + value
+            });
+          }else{
+            _this.$message({
+              type: 'error',
+              message: '删除失败'
+            });
+          }
+        })
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -115,6 +162,27 @@ export default {
         });
       });
     }
+  },
+  created() {
+    if (sessionStorage.getItem('store')) {
+      this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem('store'))));
+    }
+    const _this=this;
+    if(this.$store.state.userId==null){
+      _this.$message({
+        message:"请登录",
+        type:"error"
+      })
+      this.$router.push('/Login');
+    }
+    else {
+      const _this = this;
+      axios.get('http://localhost:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
+        _this.account=resp.data;
+        console.log(resp.data)
+      })
+    }
+
   }
 }
 </script>

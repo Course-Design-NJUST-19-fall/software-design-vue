@@ -5,10 +5,10 @@
     <el-container style="height: 500px; border: 1px solid #eee">
 <el-header>
   <el-menu style="background-color: #B3C0CD" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-    <el-menu-item style="color: #333333" index="1"><el-link href="\Main" >主页</el-link></el-menu-item>
-    <el-menu-item style="color: #333333" index="2"><el-link href="\ListProblem" >题目列表</el-link></el-menu-item>
-    <el-menu-item style="color: #333333" index="3" ><el-link href="\ProblemStatus" >提交状态</el-link></el-menu-item>
-    <el-menu-item style="color: #333333" index="4" ><el-link href="\SelfCenter" >个人中心</el-link></el-menu-item>
+    <el-menu-item style="color: #333333" index="1"><el-link @click="goHref('/Main')" >主页</el-link></el-menu-item>
+    <el-menu-item style="color: #333333" index="2"><el-link @click="goHref('/ListProblem')" >题目列表</el-link></el-menu-item>
+    <el-menu-item style="color: #333333" index="3" ><el-link @click="goHref('/ProblemStatus')" >提交状态</el-link></el-menu-item>
+    <el-menu-item style="color: #333333" index="4" ><el-link @click="goCenter()" >个人中心</el-link></el-menu-item>
   </el-menu>
   <div class="line" ></div>
 </el-header>
@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "Main",
   data() {
@@ -36,6 +38,34 @@ export default {
     }
   },
   methods:{
+    goHref(href){
+      this.$router.push(href);
+    },
+    goCenter(){
+      if (sessionStorage.getItem('store')) {
+        this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem('store'))));
+      }
+      const _this=this;
+      if(this.$store.state.userId==null){
+        _this.$message({
+          message:"请登录",
+          type:"error"
+        })
+        this.$router.push('/Login');
+      }
+      else {
+        axios.get('http://localhost:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
+          _this.account=resp.data;
+          console.log(resp.data)
+          if(_this.account.sort==='学生')
+            _this.$router.push('/SelfCenter');
+          else if(_this.account.sort==='老师')
+            _this.$router.push('/SelfCenterTeacher');
+          else if(_this.account.sort==='管理员')
+            _this.$router.push('/SelfCenterAdmin');
+        })
+      }
+    },
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     }

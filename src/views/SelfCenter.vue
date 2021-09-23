@@ -10,7 +10,7 @@
           <el-menu-item style="color: #333333" index="1"><el-link @click="goHref('/Main')" >主页</el-link></el-menu-item>
           <el-menu-item style="color: #333333" index="2"><el-link @click="goHref('/ListProblem')" >题目列表</el-link></el-menu-item>
           <el-menu-item style="color: #333333" index="3" ><el-link @click="goHref('/ProblemStatus')" >提交状态</el-link></el-menu-item>
-          <el-menu-item style="color: #333333" index="4" ><el-link @click="goHref('/SelfCenter')" >个人中心</el-link></el-menu-item>
+          <el-menu-item style="color: #333333" index="4" ><el-link @click="goCenter()" >个人中心</el-link></el-menu-item>
           <el-menu-item style="color: #333333" index="6" >  <el-link  @click="goUpdate()" >修改信息</el-link></el-menu-item>
           <el-menu-item style="color: #333333" index="5" > <el-link @click="goExit()" >退出账号</el-link></el-menu-item>
         </el-menu>
@@ -18,39 +18,38 @@
 
       </el-header>
       <el-container>
-        <el-aside width="400px" style="background-color: rgb(238, 241, 246)">
-          <el-menu :default-openeds="['1','2', '3','4','5','6']">
-            <el-submenu index="1">
-              <template slot="title">青铜</template>
-              <el-menu-item index="1-1">过题数<10,正确率<10%</el-menu-item>
-            </el-submenu>
-            <el-submenu index="2">
-              <template slot="title">白银</template>
-              <el-menu-item index="2-1">10<=过题数<50,    10% < 正确率 < 20%</el-menu-item>
-            </el-submenu>
-            <el-submenu index="3">
-              <template slot="title">黄金</template>
-              <el-menu-item index="3-1">50<=过题数<100,    20%< 正确率 < 30%</el-menu-item>
-            </el-submenu>
-            <el-submenu index="4">
-              <template slot="title">铂金</template>
-              <el-menu-item index="4-1">100<=过题数<500,    30% < 正确率 < 40% </el-menu-item>
-            </el-submenu>
-            <el-submenu index="5">
-              <template slot="title">钻石</template>
-              <el-menu-item index="5-1">500<=过题数<1000,    40% < 正确率 < 50% </el-menu-item>
-            </el-submenu>
-            <el-submenu index="6">
-              <template slot="title">王者</template>
-              <el-menu-item index="6-1">1000 < 过题数 ,    50% < 正确率 </el-menu-item>
-            </el-submenu>
+<!--        <el-aside width="400px" style="background-color: rgb(238, 241, 246)">-->
+<!--          <el-menu :default-openeds="['1','2', '3','4','5','6']">-->
+<!--            <el-submenu index="1">-->
+<!--              <template slot="title">青铜</template>-->
+<!--              <el-menu-item index="1-1">过题数<10,正确率<10%</el-menu-item>-->
+<!--            </el-submenu>-->
+<!--            <el-submenu index="2">-->
+<!--              <template slot="title">白银</template>-->
+<!--              <el-menu-item index="2-1">10<=过题数<50,    10% < 正确率 < 20%</el-menu-item>-->
+<!--            </el-submenu>-->
+<!--            <el-submenu index="3">-->
+<!--              <template slot="title">黄金</template>-->
+<!--              <el-menu-item index="3-1">50<=过题数<100,    20%< 正确率 < 30%</el-menu-item>-->
+<!--            </el-submenu>-->
+<!--            <el-submenu index="4">-->
+<!--              <template slot="title">铂金</template>-->
+<!--              <el-menu-item index="4-1">100<=过题数<500,    30% < 正确率 < 40% </el-menu-item>-->
+<!--            </el-submenu>-->
+<!--            <el-submenu index="5">-->
+<!--              <template slot="title">钻石</template>-->
+<!--              <el-menu-item index="5-1">500<=过题数<1000,    40% < 正确率 < 50% </el-menu-item>-->
+<!--            </el-submenu>-->
+<!--            <el-submenu index="6">-->
+<!--              <template slot="title">王者</template>-->
+<!--              <el-menu-item index="6-1">1000 < 过题数 ,    50% < 正确率 </el-menu-item>-->
+<!--            </el-submenu>-->
 
-          </el-menu>
-        </el-aside>
+<!--          </el-menu>-->
+<!--        </el-aside>-->
         <el-main>
           <br>
           <el-descriptions title="个人信息" direction="vertical" :column="2" border>
-
             <el-descriptions-item label="用户名">{{ account.id }}</el-descriptions-item><br>
             <el-descriptions-item label="昵称">{{ account.nicoName }}</el-descriptions-item><br>
             <el-descriptions-item label="用户类型" >{{ account.sort }}</el-descriptions-item><br>
@@ -58,7 +57,7 @@
             <el-descriptions-item label="通过数量" >{{ account.acceptNumber }}</el-descriptions-item><br>
             <el-descriptions-item label="提交数量" >{{ account.submitNumber }}</el-descriptions-item><br>
             <el-descriptions-item label="正确率" >{{getAcRate() }}</el-descriptions-item><br>
-            <el-descriptions-item label="我的段位" >铂金</el-descriptions-item><br>
+            <el-descriptions-item label="我的积分" >{{ account.rating }}</el-descriptions-item><br>
           </el-descriptions>
 
           <br>
@@ -98,6 +97,31 @@ export default {
     }
   },
   methods: {
+    goCenter(){
+      if (sessionStorage.getItem('store')) {
+        this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem('store'))));
+      }
+      const _this=this;
+      if(this.$store.state.userId==null){
+        _this.$message({
+          message:"请登录",
+          type:"error"
+        })
+        this.$router.push('/Login');
+      }
+      else {
+        axios.get('http://localhost:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
+          _this.account=resp.data;
+          console.log(resp.data)
+          if(_this.account.sort==='学生')
+             _this.$router.push('/SelfCenter');
+          else if(_this.account.sort==='老师')
+            _this.$router.push('/SelfCenterTeacher');
+          else if(_this.account.sort==='管理员')
+            _this.$router.push('/SelfCenterAdmin');
+        })
+      }
+    },
     goHref(href){
       this.$router.push(href);
     },
@@ -157,7 +181,6 @@ export default {
           console.log(resp.data)
       })
     }
-
   }
 }
 </script>

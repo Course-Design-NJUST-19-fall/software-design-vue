@@ -17,6 +17,7 @@ import AddProblem from '../views/AddProblem.vue'
 import UserList from '../views/UserList.vue'
 import Main from '../views/Main.vue'
 import FindPassword from "@/views/FindPassword";
+import CheckAccount from "@/views/CheckAccount";
 
 Vue.use(VueRouter)
 
@@ -111,6 +112,11 @@ const routes = [
     path:'/FindPassword',
     name:'FindPassword',
     component: FindPassword
+  },
+  {
+    path: '/CheckAccount',
+    name:'CheckAccount',
+    component: CheckAccount
   }
 
 ]

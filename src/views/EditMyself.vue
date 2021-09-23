@@ -6,7 +6,7 @@
         <el-menu-item style="color: #333333" index="1"><el-link @click="goHref('/Main')" >主页</el-link></el-menu-item>
         <el-menu-item style="color: #333333" index="2"><el-link @click="goHref('/ListProblem')"  >题目列表</el-link></el-menu-item>
         <el-menu-item style="color: #333333" index="3" ><el-link @click="goHref('/ProblemStatus')"  >提交状态</el-link></el-menu-item>
-        <el-menu-item style="color: #333333" index="4" ><el-link @click="goHref('/SelfCenter')"  >个人中心</el-link></el-menu-item>
+        <el-menu-item style="color: #333333" index="4" ><el-link @click="goCenter()" >个人中心</el-link></el-menu-item>
         <el-menu-item style="color: #333333" index="5" >  <el-link @click="goUpdate()" >修改信息</el-link></el-menu-item>
         <el-menu-item style="color: #333333" index="6" > <el-link @click="goExit()" >退出账号</el-link></el-menu-item>
 
@@ -98,8 +98,34 @@ export default {
   },
 
   methods: {
+    goCenter(){
+      if (sessionStorage.getItem('store')) {
+        this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem('store'))));
+      }
+      const _this=this;
+      if(this.$store.state.userId==null){
+        _this.$message({
+          message:"请登录",
+          type:"error"
+        })
+        this.$router.push('/Login');
+      }
+      else {
+        axios.get('http://localhost:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
+          _this.account=resp.data;
+          console.log(resp.data)
+          if(_this.account.sort==='学生')
+            _this.$router.push('/SelfCenter');
+          else if(_this.account.sort==='老师')
+            _this.$router.push('/SelfCenterTeacher');
+          else if(_this.account.sort==='管理员')
+            _this.$router.push('/SelfCenterAdmin');
+        })
+      }
+    },
     gotoSelfCenter(){
-      this.$router.push('/SelfCenter');
+      const url=this.$route.query.url;
+      this.$router.push(url);
     },
     goHref(href){
       this.$router.push(href);
@@ -109,10 +135,15 @@ export default {
         path:'/EditMyself',
         query:{
           id:this.account.id
+
         }
       });
     },
     goExit(){
+      this.$message({
+        message:'成功推出！',
+        type:"success"
+      })
       this.$store.commit('update',['userId',null])
       sessionStorage.setItem('store',JSON.stringify(this.$store.state))
       this.$router.push('/Main')
