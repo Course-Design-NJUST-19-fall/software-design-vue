@@ -1,6 +1,18 @@
 <template>
   <div>
-    <el-container style="height: 750px; border: 1px solid #eee">
+    <el-container style="height: 800px;">
+
+      <el-header style="background-color: #DCDFE6" >
+        <el-menu style="background-color: Transparent"  :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+          <el-menu-item style="color: #333333" index="1"><el-link @click="goHref('/Main')" >主页</el-link></el-menu-item>
+          <el-menu-item style="color: #333333" index="2"><el-link @click="goHref('/ListProblem')" >题目列表</el-link></el-menu-item>
+          <el-menu-item style="color: #333333" index="3" ><el-link @click="goHref('/ProblemStatus')" >提交状态</el-link></el-menu-item>
+           <el-menu-item style="color: #333333" index="5" ><el-link @click="goBack()" >题目详情</el-link></el-menu-item>
+          <el-menu-item style="color: #333333" index="6" ><el-link @click="goHref('/Submit')" >提交代码</el-link></el-menu-item>
+          <el-menu-item style="color: #333333" index="4" ><el-link @click="goCenter()" >个人中心</el-link></el-menu-item>
+        </el-menu>
+        <div class="line"></div>
+      </el-header>
       <div class="background">
         <vue-particles
             color="#dedede"
@@ -21,31 +33,24 @@
         >
         </vue-particles>
       </div>
-
-        <el-header style="background-color: #DCDFE6" >
-          <el-menu style="background-color: Transparent"  :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-          <el-menu-item style="color: #333333" index="1"><el-link @click="goHref('/Main')" >主页</el-link></el-menu-item>
-            <el-menu-item style="color: #333333" index="2"><el-link @click="goHref('/ListProblem')" >题目列表</el-link></el-menu-item>
-            <el-menu-item style="color: #333333" index="3" ><el-link @click="goHref('/ProblemStatus')" >提交状态</el-link></el-menu-item>
-            <el-menu-item style="color: #333333" index="4" ><el-link @click="goCenter()" >个人中心</el-link></el-menu-item>
-            <el-menu-item style="color: #333333" index="5" ><el-link @click="goBack()" >题目详情</el-link></el-menu-item>
-            <el-menu-item style="color: #333333" index="6" ><el-link @click="goHref('/Submit')" >提交代码</el-link></el-menu-item>
-          </el-menu>
-          <div class="line"></div>
-        </el-header>
-        <el-main>
-          <p style="text-align: center">用户：{{this.$store.state.userId}}</p>
-          <p style="text-align: center">题目编号：{{problemId}}</p>
-          <div class="main" >
+      <div >
+        <br>
+        <p class="word-v-middle" style="font-size: xx-large;">用户：{{this.$store.state.userId}}</p>
+        <br>
+        <p class="word-v-middle" style="font-size: xx-large;">题目编号：{{problemId}}</p>
+        <br>
+      </div>
+        <el-main style="overflow: hidden">
+            <div class="main">
             <codemirror v-model="submitCode" :options="options"></codemirror>
           </div>
         </el-main>
-      <el-row>
-        <div style="width:45%;display: inline-block;text-align: end;" > <el-button type="primary" round  @click="SubmitCode(submitCode)">提交测评</el-button></div>
-        <div style="width:10%;display: inline-block;text-align: end;"></div>
-        <div style="width:45%;display: inline-block;" ><el-button type="primary" round @click="goBack()" >返回题目</el-button></div>
-      </el-row>
     </el-container>
+    <el-row>
+      <div style="width:45%;display: inline-block;text-align: end;" > <el-button type="primary" round  @click="SubmitCode(submitCode)">提交测评</el-button></div>
+      <div style="width:10%;display: inline-block;text-align: end;"></div>
+      <div style="width:45%;display: inline-block;" ><el-button type="primary" round @click="goBack()" >返回题目</el-button></div>
+    </el-row>
   </div>
 </template>
 
@@ -55,7 +60,7 @@ const axios = require('axios');
 import {codemirror} from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 // 引入主题,配置后生效
-import 'codemirror/theme/monokai.css'
+import 'codemirror/theme/mdn-like.css'
 //引入语言,配置后生效
 import 'codemirror/mode/clike/clike.js'
 export default {
@@ -73,7 +78,7 @@ export default {
       // 默认配置
       options: {
         tabSize: 2, // 缩进格式
-        theme: 'monokai', // 指定主题，对应主题库 JS 需要提前引入
+        theme: 'mdn-like', // 指定主题，对应主题库 JS 需要提前引入
         lineNumbers: true, // 是否显示行号
         indentUnit: 2,
         smartIndent: true,
@@ -103,7 +108,7 @@ export default {
         this.$router.push('/Login');
       }
       else {
-        axios.get('http://localhost:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
+        axios.get('http://121.37.137.154:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
           _this.account=resp.data;
           console.log(resp.data)
           if(_this.account.sort==='学生')
@@ -137,7 +142,7 @@ export default {
         background:'rgba(0,0,0,0.5)'
       })
           const _this=this;
-          axios.post('http://localhost:8181//problem/judgeProblem/', {problemId:this.problemId,submitterId:this.$store.state.userId,code:code}).then(function (resp){
+          axios.post('http://121.37.137.154:8181//problem/judgeProblem/', {problemId:this.problemId,submitterId:this.$store.state.userId,code:code}).then(function (resp){
                 console.log(resp);
                 loading.close();
               _this.$message({
@@ -175,9 +180,9 @@ export default {
   background-color: #fff;
   border-radius: 10px;
   width: 800px;
-  height: 430px;
+  height: 600px;
   margin: auto;
-  position: absolute;
+  position: center;
   top: 0;
   left: 0;
   right: 0;
@@ -185,12 +190,28 @@ export default {
 }
 
 .background {
+  background-color: #B3C0D1;
+  background-size: 100% 100%;
   left: 0;
   top: 0;
   width:100%;
   height:100%;  /**宽高100%是为了图片铺满屏幕 */
   z-index:-1;
-  position: absolute;
+  position: fixed;
+  /*position: absolute;*/
+}
+.word-v-middle{
+  margin-bottom: 0;
+  font-size: 10px;
+  min-height: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 10px;
+  margin-top: 5px;
+  color: black;
+  white-space: normal;
+  font-family: "楷体", "楷体_GB2312";
 }
 
 </style>

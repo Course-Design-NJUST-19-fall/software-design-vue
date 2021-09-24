@@ -42,13 +42,6 @@
             <el-input v-model="account.phoneNumber"></el-input>
           </el-form-item>
 
-          <el-form-item label="用户类别" prop="sort">
-            <el-radio-group v-model="account.sort">
-              <el-radio label="学生"></el-radio>
-              <el-radio label="老师"></el-radio>
-            </el-radio-group>
-          </el-form-item>
-
           <el-form-item>
             <el-button type="primary" v-on:click="gotoLogin">返回登录</el-button>
             <el-button type="primary" @click="submitForm('ruleForm')">创建</el-button>
@@ -74,17 +67,16 @@ export default {
         cpwd:'',
         nicoName: '',
         phoneNumber:'',
-        sort:''
       },
       rules: {
         id: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 1, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+          { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
         ],
 
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+          { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
         ],
         cpwd:[{required:true,message:'确认密码',trigger:'blur'},
           {
@@ -100,16 +92,14 @@ export default {
           trigger:'blur'
         }],
         nicoName: [
-          { required: false, message: '请输入密码', trigger: 'blur' },
+          { required: false, message: '请输入昵称', trigger: 'blur' },
           { min: 0, max: 20, message: '长度在 0 到 20 个字符', trigger: 'blur' }
         ],
         phoneNumber: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { required: true, message: '请输入手机号', trigger: 'blur' },
           { min: 8, max: 14, message: '长度在 8 到 14 个字符', trigger: 'blur' }
         ],
-        sort: [
-          { required: true, message: '请选用户类型', trigger: 'change' }
-        ],
+
 
       }
     };
@@ -120,7 +110,7 @@ export default {
       const _this=this;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          axios.post('http://localhost:8181//account/save',this.account).then(function (resp){
+          axios.post('http://121.37.137.154:8181//account/save',this.account).then(function (resp){
             console.log(resp);
             if(resp.data==='SUCCESS'){
               _this.$message({
@@ -194,12 +184,15 @@ body > .el-container {
 }
 
 .background {
+  background-color: #B3C0D1;
+  background-size: 100% 100%;
   left: 0;
   top: 0;
   width:100%;
   height:100%;  /**宽高100%是为了图片铺满屏幕 */
   z-index:-1;
-  position: absolute;
+  position: fixed;
+  /*position: absolute;*/
 }
 
 

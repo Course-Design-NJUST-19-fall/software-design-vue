@@ -1,9 +1,7 @@
 <template>
   <div>
 
-
-
-    <el-container style="height: 800px; border: 1px solid #eee">
+    <el-container style="height: 800px; ">
       <div class="background">
         <vue-particles
             color="#dedede"
@@ -31,6 +29,7 @@
           <el-menu-item style="color: #333333" index="2"><el-link @click="goHref('/ListProblem')" >题目列表</el-link></el-menu-item>
           <el-menu-item style="color: #333333" index="3" ><el-link @click="goHref('/ProblemStatus')" >提交状态</el-link></el-menu-item>
           <el-menu-item style="color: #333333" index="4" ><el-link @click="goCenter()" >个人中心</el-link></el-menu-item>
+          <el-menu-item style="color: #333333" index="6" >  <el-link  @click="goUpdate()" >修改信息</el-link></el-menu-item>
           <el-menu-item style="color: #333333" index="5" > <el-link @click="goExit()" >退出账号</el-link></el-menu-item>
         </el-menu>
         <div class="line"></div>
@@ -39,14 +38,14 @@
       <el-container>
         <el-main>
           <el-descriptions title="题目管理" direction="vertical" :column="2" border>
-            <el-descriptions-item label="增加" ><el-link href="\AddProblem"  type="primary">新增题目</el-link></el-descriptions-item><br>
+            <el-descriptions-item label="增加" ><el-link @click="goAdd()"  type="primary">新增题目</el-link></el-descriptions-item><br>
             <el-descriptions-item label="删除" >
               <el-button type="text" @click="delProblem">删除题目</el-button>
             </el-descriptions-item><br>
           </el-descriptions>
 
           <el-descriptions title="用户管理" direction="vertical" :column="2" border>
-            <el-descriptions-item label="用户列表" ><el-link href="\UserList"  type="primary">查看所有用户</el-link></el-descriptions-item><br>
+            <el-descriptions-item label="用户列表" ><el-link @click="goUserList()"  type="primary">查看所有用户</el-link></el-descriptions-item><br>
             <el-descriptions-item label="封禁用户" >
               <el-button type="text" @click="delUser">删除违规用户</el-button>
             </el-descriptions-item><br>
@@ -83,6 +82,22 @@ export default {
     }
   },
   methods: {
+    goAdd(){
+      this.$router.push({
+        path:'/AddProblem',
+        query:{
+          url:this.$route.path
+        }
+      });
+    },
+    goUserList(){
+      this.$router.push({
+        path:'/UserList',
+        query:{
+          url:this.$route.path
+        }
+      });
+    },
     goCenter(){
       if (sessionStorage.getItem('store')) {
         this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem('store'))));
@@ -96,7 +111,7 @@ export default {
         this.$router.push('/Login');
       }
       else {
-        axios.get('http://localhost:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
+        axios.get('http://121.37.137.154:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
           _this.account=resp.data;
           console.log(resp.data)
           if(_this.account.sort==='学生')
@@ -121,6 +136,10 @@ export default {
       });
     },
     goExit(){
+      this.$message({
+        message:"退出成功!",
+        type:"success"
+      })
       this.$store.commit('update',['userId',null])
       sessionStorage.setItem('store',JSON.stringify(this.$store.state))
       this.$router.push('/Main')
@@ -134,7 +153,7 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
       }).then(({ value }) => {
-        axios.delete('http://localhost:8181//problem/deleteById/'+value).then(function (resp){
+        axios.delete('http://121.37.137.154:8181//problem/deleteById/'+value).then(function (resp){
             if(resp.data){
               _this.$message({
                 type: 'success',
@@ -161,7 +180,7 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
       }).then(({ value }) => {
-        axios.delete('http://localhost:8181//account/deleteById/'+value).then(function (resp){
+        axios.delete('http://121.37.137.154:8181//account/deleteById/'+value).then(function (resp){
           if(resp.data){
             _this.$message({
               type: 'success',
@@ -196,7 +215,7 @@ export default {
     }
     else {
       const _this = this;
-      axios.get('http://localhost:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
+      axios.get('http://121.37.137.154:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
         _this.account=resp.data;
         console.log(resp.data)
       })
@@ -221,12 +240,15 @@ export default {
 }
 
 .background {
+  background-color: #B3C0D1;
+  background-size: 100% 100%;
   left: 0;
   top: 0;
   width:100%;
   height:100%;  /**宽高100%是为了图片铺满屏幕 */
   z-index:-1;
-  position: absolute;
+  position: fixed;
+  /*position: absolute;*/
 }
 
 </style>

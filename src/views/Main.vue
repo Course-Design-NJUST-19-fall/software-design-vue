@@ -2,7 +2,7 @@
   <div>
 
 
-    <el-container style="height: 750px; border: 1px solid #eee">
+    <el-container style="height: 800px; ">
       <div class="background">
         <vue-particles
             color="#dedede"
@@ -34,19 +34,19 @@
   <div class="line" ></div>
 </el-header>
 
-      <el-main >
+      <el-main style="overflow: hidden">
 
         <div >
-          <h2 class="word-v-middle" style="font-size: xx-large;">欢迎回来</h2>
+          <h2 class="word-v-middle" style="font-size: xx-large;">欢迎回来！</h2>
           <br>
-          <div >
-            <div class="word-v-middle" style="font-size: larger">
-              距 <strong>CSP-J/S 2021 第二轮</strong> 还剩 <strong>28 天</strong><br>
-              </div>
-            <div class="word-v-middle" style="font-size: larger">
-              距 <strong>NOIP 2021</strong> 还剩 <strong>56 天</strong><br>
-            </div>
-          </div>
+<!--          <div>-->
+<!--            <div class="word-v-middle" style="font-size: larger">-->
+<!--              距 <strong>CSP-J/S 2021 第二轮</strong> 还剩 <strong>28 天</strong><br>-->
+<!--            </div>-->
+<!--            <div class="word-v-middle" style="font-size: larger">-->
+<!--              距 <strong>NOIP 2021</strong> 还剩 <strong>56 天</strong><br>-->
+<!--            </div>-->
+<!--          </div>-->
         </div>
 
         <el-calendar v-model="value">
@@ -88,7 +88,7 @@ export default {
         this.$router.push('/Login');
       }
       else {
-        axios.get('http://localhost:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
+        axios.get('http://121.37.137.154:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
           _this.account=resp.data;
           console.log(resp.data)
           if(_this.account.sort==='学生')
@@ -170,6 +170,16 @@ margin-left: 200px;
   white-space: normal;
   font-family: "楷体", "楷体_GB2312";
 }
-
+.background {
+  background-color: #B3C0D1;
+  background-size: 100% 100%;
+  left: 0;
+  top: 0;
+  width:100%;
+  height:100%;  /**宽高100%是为了图片铺满屏幕 */
+  z-index:-1;
+  position: fixed;
+  /*position: absolute;*/
+}
 </style>
 

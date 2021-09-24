@@ -63,11 +63,11 @@ export default {
       rules: {
         id: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 1, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+          { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
         ],
 
         phoneNumber: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { required: true, message: '请输入手机号', trigger: 'blur' },
           { min: 8, max: 14, message: '长度在 8 到 14 个字符', trigger: 'blur' }
         ],
 
@@ -78,7 +78,7 @@ export default {
   methods: {
     submitForm(fromName){
       const _this = this;
-      axios.get('http://localhost:8181//account/findById/'+_this.account.id).then(function (resp){
+      axios.get('http://121.37.137.154:8181//account/findById/'+_this.account.id).then(function (resp){
         console.log(resp);
         if(resp.data==='') {
           _this.$message({
@@ -174,12 +174,15 @@ body > .el-container {
 
 
 .background {
+  background-color: #B3C0D1;
+  background-size: 100% 100%;
   left: 0;
   top: 0;
   width:100%;
   height:100%;  /**宽高100%是为了图片铺满屏幕 */
   z-index:-1;
-  position: absolute;
+  position: fixed;
+  /*position: absolute;*/
 }
 
 

@@ -1,0 +1,1 @@
+{"title":"阶乘之和","timelimit":1000,"memorylimit":128000,"level":2,"description":"用高精度计算出 S = 1! + 2! + 3! + ··· + n!S=1!+2!+3!+⋯+n!（n \\le 50n≤50）。\n","inputdescription":"一个正整数 n。\n","outputdescription":"一个正整数 S，表示计算结果。\n","inputsample":"3","outputsample":"9","datacount":1,"datascore":{"1":100},"hint":"","source":"","compiler":"cpp","solutioncode":"","solutiontext":""}

@@ -1,6 +1,26 @@
 <template>
 <div>
-  <el-container style="height: 800px; border: 1px solid #eee">
+  <el-container style="height: 800px;">
+    <div class="background">
+      <vue-particles
+          color="#dedede"
+          :particleOpacity="0.8"
+          :particlesNumber="80"
+          shapeType="circle"
+          :particleSize="4"
+          linesColor="#dedede"
+          :linesWidth="1"
+          :lineLinked="true"
+          :lineOpacity="0.8"
+          :linesDistance="150"
+          :moveSpeed="3"
+          :hoverEffect="true"
+          hoverMode="grab"
+          :clickEffect="true"
+          clickMode="push"
+      >
+      </vue-particles>
+    </div>
     <el-container>
       <el-main>
     <el-descriptions title="个人信息" direction="vertical" :column="2" border>
@@ -60,7 +80,7 @@ export default {
   },
   created() {
       const _this = this;
-      axios.get('http://localhost:8181//account/findById/'+_this.$route.query.id).then(function (resp){
+      axios.get('http://121.37.137.154:8181//account/findById/'+_this.$route.query.id).then(function (resp){
         _this.account=resp.data;
         console.log(resp.data)
       })
@@ -69,5 +89,16 @@ export default {
 </script>
 
 <style scoped>
+.background {
+  background-color: #B3C0D1;
+  background-size: 100% 100%;
+  left: 0;
+  top: 0;
+  width:100%;
+  height:100%;  /**宽高100%是为了图片铺满屏幕 */
+  z-index:-1;
+  position: fixed;
+  /*position: absolute;*/
+}
 
 </style>

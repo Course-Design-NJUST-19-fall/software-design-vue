@@ -1,6 +1,6 @@
 <template>
 <div>
-  <el-container style="height: 800px; border: 1px solid #eee">
+  <el-container style="height: 800px">
     <div class="background">
       <vue-particles
           color="#dedede"
@@ -29,8 +29,6 @@
         <el-menu-item style="color: #333333" index="3" ><el-link @click="goHref('/ProblemStatus')"  >提交状态</el-link></el-menu-item>
         <el-menu-item style="color: #333333" index="4" ><el-link @click="goCenter()" >个人中心</el-link></el-menu-item>
         <el-menu-item style="color: #333333" index="5" >  <el-link @click="goUpdate()" >修改信息</el-link></el-menu-item>
-        <el-menu-item style="color: #333333" index="6" > <el-link @click="goExit()" >退出账号</el-link></el-menu-item>
-
       </el-menu>
       <div class="line"></div>
 
@@ -84,16 +82,16 @@ export default {
       rules: {
         name: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 1, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+          { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
         ],
 
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+          { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
         ],
 
         phoneNumber: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { required: true, message: '请输入手机号', trigger: 'blur' },
           { min: 8, max: 14, message: '长度在 8 到 14 个字符', trigger: 'blur' }
         ],
         cpwd:[{required:true,message:'确认密码',trigger:'blur'},
@@ -110,7 +108,7 @@ export default {
             trigger:'blur'
           }],
         nicoName: [
-          { required: false, message: '请输入密码', trigger: 'blur' },
+          { required: false, message: '请输入昵称', trigger: 'blur' },
           { min: 0, max: 20, message: '长度在 0 到 20 个字符', trigger: 'blur' }
         ]
       },
@@ -132,7 +130,7 @@ export default {
         this.$router.push('/Login');
       }
       else {
-        axios.get('http://localhost:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
+        axios.get('http://121.37.137.154:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
           _this.account=resp.data;
           console.log(resp.data)
           if(_this.account.sort==='学生')
@@ -155,8 +153,8 @@ export default {
       this.$router.push({
         path:'/EditMyself',
         query:{
-          id:this.account.id
-
+          account:this.account,
+          url:this.$route.path
         }
       });
     },
@@ -173,7 +171,7 @@ export default {
       const _this = this;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          axios.put('http://localhost:8181//account/updated', this.account).then(function (resp) {
+          axios.put('http://121.37.137.154:8181//account/updated', this.account).then(function (resp) {
             console.log(resp.data);
             if (resp.data) {
               _this.$message({
@@ -225,12 +223,15 @@ body > .el-container {
 }
 
 .background {
+  background-color: #B3C0D1;
+  background-size: 100% 100%;
   left: 0;
   top: 0;
   width:100%;
   height:100%;  /**宽高100%是为了图片铺满屏幕 */
   z-index:-1;
-  position: absolute;
+  position: fixed;
+  /*position: absolute;*/
 }
 
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <el-container style="height: 800px; border: 1px solid #eee">
+    <el-container style="height: 800px;">
 
       <div class="background">
         <vue-particles
@@ -38,35 +38,6 @@
 
       </el-header>
       <el-container>
-        <el-aside width="400px" style="background-color: rgb(238, 241, 246)">
-          <el-menu :default-openeds="['1','2', '3','4','5','6']">
-            <el-submenu index="1">
-              <template slot="title">青铜</template>
-              <el-menu-item index="1-1">积分<100</el-menu-item>
-            </el-submenu>
-            <el-submenu index="2">
-              <template slot="title">白银</template>
-              <el-menu-item index="2-1"> 100<=积分<200 </el-menu-item>
-            </el-submenu>
-            <el-submenu index="3">
-              <template slot="title">黄金</template>
-              <el-menu-item index="3-1">200<=积分<500</el-menu-item>
-            </el-submenu>
-            <el-submenu index="4">
-              <template slot="title">铂金</template>
-              <el-menu-item index="4-1">500<=积分<1000</el-menu-item>
-            </el-submenu>
-            <el-submenu index="5">
-              <template slot="title">钻石</template>
-              <el-menu-item index="5-1">1000<=积分<3000</el-menu-item>
-            </el-submenu>
-            <el-submenu index="6">
-              <template slot="title">王者</template>
-              <el-menu-item index="6-1">3000<=积分</el-menu-item>
-            </el-submenu>
-
-          </el-menu>
-        </el-aside>
         <el-main>
           <br>
           <el-descriptions title="个人信息" direction="vertical" :column="2" border>
@@ -79,16 +50,6 @@
             <el-descriptions-item label="正确率" >{{getAcRate() }}</el-descriptions-item><br>
             <el-descriptions-item label="我的积分" >{{ account.rating }}</el-descriptions-item><br>
           </el-descriptions>
-
-          <br>
-          <br>
-<!--          <el-descriptions title="我的班级" direction="vertical" :column="2" border>-->
-<!--            <el-descriptions-item label="班级">919106840135</el-descriptions-item><br>-->
-<!--            <el-descriptions-item label="我的老师">衷宜</el-descriptions-item><br>-->
-<!--            <el-descriptions-item label="最新作业" > <el-button type="text" @click="open">查看最新作业</el-button></el-descriptions-item><br>-->
-<!--            <el-descriptions-item label="所有作业" ><el-link href="\AllHomework"  type="primary">查看历史作业</el-link></el-descriptions-item><br>-->
-<!--          </el-descriptions>-->
-
         </el-main>
       </el-container>
     </el-container>
@@ -130,7 +91,7 @@ export default {
         this.$router.push('/Login');
       }
       else {
-        axios.get('http://localhost:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
+        axios.get('http://121.37.137.154:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
           _this.account=resp.data;
           console.log(resp.data)
           if(_this.account.sort==='学生')
@@ -157,6 +118,10 @@ export default {
     goExit(){
       this.$store.commit('update',['userId',null])
       sessionStorage.setItem('store',JSON.stringify(this.$store.state))
+      this.$message({
+        message:"退出成功!",
+        type:"success"
+      })
       this.$router.push('/Main')
     },
     numFilter(value) {
@@ -167,17 +132,6 @@ export default {
       if(this.account.submitNumber===0)return '0.0%';
       else return this.numFilter(100*this.account.acceptNumber/this.account.submitNumber)+'%';
     },
-    // open() {
-    //   this.$alert('13,14,15,16', '最新布置的作业', {
-    //     confirmButtonText: '确定',
-    //     callback: action => {
-    //       this.$message({
-    //         type: 'info',
-    //         message: `action: ${ action }`
-    //       });
-    //     }
-    //   });
-    // },
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     }
@@ -196,7 +150,7 @@ export default {
     }
     else {
       const _this = this;
-      axios.get('http://localhost:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
+      axios.get('http://121.37.137.154:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
           _this.account=resp.data;
           console.log(resp.data)
       })
@@ -220,12 +174,15 @@ export default {
 }
 
 .background {
+  background-color: #B3C0D1;
+  background-size: 100% 100%;
   left: 0;
   top: 0;
   width:100%;
   height:100%;  /**宽高100%是为了图片铺满屏幕 */
   z-index:-1;
-  position: absolute;
+  position: fixed;
+  /*position: absolute;*/
 }
 
 </style>

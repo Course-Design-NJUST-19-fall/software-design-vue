@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-container style="background-color: Transparent; height: 1000px; border: 1px solid #eee">
+    <el-container style="background-color: Transparent; height: 1000px; ">
 
 
       <div class="background">
@@ -24,7 +24,7 @@
         </vue-particles>
       </div>
 
-      <el-header style="background-color: Transparent; font-size: 30px">
+      <el-header style="background-color: Transparent; font-size: 30px;">
         
 
         <img class="mlogo" src="../assets/title.png"  alt="" >
@@ -33,6 +33,7 @@
       <br>
 
       <el-main style="background-color: Transparent" >
+
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 
           <el-form-item label="用户名" prop="id">
@@ -70,11 +71,11 @@ export default {
       rules: {
         id: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+          { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+          { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
         ],
       }
     };
@@ -87,18 +88,18 @@ export default {
 
     submitForm(formName) {
       const _this=this;
-      axios.get('http://localhost:8181//account/signIn/'+this.ruleForm.id+'/'+this.ruleForm.password).then(function (resp){
+      axios.get('http://121.37.137.154:8181//account/signIn/'+this.ruleForm.id+'/'+this.ruleForm.password).then(function (resp){
                console.log(resp.data);
-               if(resp.data!=null){
+               if(resp.data!==''){
                  _this.$message({
                    message:"登录成功!",
                    type:"success"
                  })
                  _this.$store.commit('update',['userId',_this.ruleForm.id])
                  sessionStorage.setItem('store',JSON.stringify(_this.$store.state))
-                 if(resp.data=='学生')
+                 if(resp.data==='学生')
                  _this.$router.push('/SelfCenter');
-                 else if(resp=='老师')
+                 else if(resp==='老师')
                    _this.$router.push('/SelfCenterTeacher');
                  else _this.$router.push('/SelfCenterAdmin')
                }
@@ -161,6 +162,7 @@ body > .el-container {
 }
 
 .demo-ruleForm{
+
   max-width: 500px;
   margin: 0 auto ;
 }
@@ -168,7 +170,17 @@ body > .el-container {
 .mlogo{
   height: 160%;
 }
-
+.background {
+  background-color: white;
+  background-size: 100% 100%;
+  left: 0;
+  top: 0;
+  width:100%;
+  height:100%;  /**宽高100%是为了图片铺满屏幕 */
+  z-index:-1;
+  position: fixed;
+  /*position: absolute;*/
+}
 
 
 </style>

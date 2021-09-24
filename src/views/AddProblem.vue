@@ -30,7 +30,6 @@
           <el-menu-item style="color: #333333" index="2"><el-link @click="goHref('/ListProblem')" >题目列表</el-link></el-menu-item>
           <el-menu-item style="color: #333333" index="3" ><el-link @click="goHref('/ProblemStatus')" >提交状态</el-link></el-menu-item>
           <el-menu-item style="color: #333333" index="4" ><el-link @click="goCenter()" >个人中心</el-link></el-menu-item>
-          <el-menu-item style="color: #333333" index="5" > <el-link @click="goExit()" >退出账号</el-link></el-menu-item>
         </el-menu>
         <div class="line"></div>
 
@@ -50,16 +49,6 @@
             <el-input v-model="problem.memoryLimit"></el-input>
           </el-form-item>
 
-          <el-form-item label="题目难度" prop="rating">
-            <el-select v-model="problem.rating" placeholder="请选择题目难度">
-              <el-option label="简单" value="1"></el-option>
-              <el-option label="较简单" value="2"></el-option>
-              <el-option label="一般" value="3"></el-option>
-              <el-option label="较困难" value="4"></el-option>
-              <el-option label="困难" value="5"></el-option>
-            </el-select>
-          </el-form-item>
-
           <el-form-item label="题面文件路径" prop="problemPath">
             <el-input v-model="problem.problemPath"></el-input>
           </el-form-item>
@@ -72,8 +61,19 @@
             <el-input v-model="problem.outputPath"></el-input>
           </el-form-item>
 
+          <el-form-item label="题目难度" prop="rating">
+            <el-select v-model="problem.rating" placeholder="请选择题目难度">
+              <el-option label="简单" value="1"></el-option>
+              <el-option label="较简单" value="2"></el-option>
+              <el-option label="一般" value="3"></el-option>
+              <el-option label="较困难" value="4"></el-option>
+              <el-option label="困难" value="5"></el-option>
+            </el-select>
+          </el-form-item>
+
           <el-form-item>
             <el-button type="primary" @click="submitForm('ruleForm')">确认</el-button>
+            <el-button type="primary" @click="goBack()">返回</el-button>
           </el-form-item>
 
         </el-form>
@@ -128,6 +128,35 @@ export default {
     }
   },
   methods: {
+    goBack(){
+      const url=this.$route.query.url;
+      this.$router.push(url);
+    },
+    goCenter(){
+      if (sessionStorage.getItem('store')) {
+        this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem('store'))));
+      }
+      const _this=this;
+      if(this.$store.state.userId==null){
+        _this.$message({
+          message:"请登录",
+          type:"error"
+        })
+        this.$router.push('/Login');
+      }
+      else {
+        axios.get('http://121.37.137.154:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
+          _this.account=resp.data;
+          console.log(resp.data)
+          if(_this.account.sort==='学生')
+            _this.$router.push('/SelfCenter');
+          else if(_this.account.sort==='老师')
+            _this.$router.push('/SelfCenterTeacher');
+          else if(_this.account.sort==='管理员')
+            _this.$router.push('/SelfCenterAdmin');
+        })
+      }
+    },
     goHref(href){
       this.$router.push(href);
     },
@@ -138,7 +167,7 @@ export default {
       const _this=this;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          axios.post('http://localhost:8181//problem/save',this.problem).then(function (resp){
+          axios.post('http://121.37.137.154:8181//problem/save',this.problem).then(function (resp){
             console.log(resp);
             if(resp.data){
               _this.$message({
@@ -203,6 +232,17 @@ body > .el-container {
 .demo-form{
   max-width: 500px;
   margin: 0 auto ;
+}
+.background {
+  background-color: #B3C0D1;
+  background-size: 100% 100%;
+  left: 0;
+  top: 0;
+  width:100%;
+  height:100%;  /**宽高100%是为了图片铺满屏幕 */
+  z-index:-1;
+  position: fixed;
+  /*position: absolute;*/
 }
 
 

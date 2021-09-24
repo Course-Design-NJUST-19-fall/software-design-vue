@@ -1,6 +1,6 @@
 <template>
 <div>
-  <el-container style=" border: 1px solid #eee">
+  <el-container>
     <div class="background">
       <vue-particles
           color="#dedede"
@@ -112,7 +112,7 @@ export default {
         this.$router.push('/Login');
       }
       else {
-        axios.get('http://localhost:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
+        axios.get('http://121.37.137.154:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
           _this.account=resp.data;
           console.log(resp.data)
           if(_this.account.sort==='学生')
@@ -140,7 +140,7 @@ export default {
     },
     page(CurrentPage){
       const _this=this;
-      axios.get('http://localhost:8181//testRecord/findAll/'+CurrentPage+'/10').then(function (resp){
+      axios.get('http://121.37.137.154:8181//testRecord/findAll/'+CurrentPage+'/10').then(function (resp){
             _this.testRecord=resp.data.records
             _this.total=resp.data.total
             console.log(_this.testRecord)
@@ -152,7 +152,7 @@ export default {
     const _this=this;
     let CurrentPage= this.$route.query.currentPage;
     if(CurrentPage==null)CurrentPage=1;
-    axios.get('http://localhost:8181//testRecord/findAll/'+CurrentPage+'/10').then(function (resp){
+    axios.get('http://121.37.137.154:8181//testRecord/findAll/'+CurrentPage+'/10').then(function (resp){
           _this.testRecord=resp.data.records
           _this.total=resp.data.total
           console.log(_this.testRecord)
@@ -176,5 +176,16 @@ export default {
 
 body {
   margin: 0;
+}
+.background {
+  background-color: #B3C0D1;
+  background-size: 100% 100%;
+  left: 0;
+  top: 0;
+  width:100%;
+  height:100%;  /**宽高100%是为了图片铺满屏幕 */
+  z-index:-1;
+  position: fixed;
+  /*position: absolute;*/
 }
 </style>

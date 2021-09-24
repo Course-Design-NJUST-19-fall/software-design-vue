@@ -66,11 +66,11 @@ export default {
       rules: {
         id: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 1, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+          { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '请输入新的密码', trigger: 'blur' },
-          { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+          { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
         ],
         cpwd:[{required:true,message:'确认密码',trigger:'blur'},
           {
@@ -93,7 +93,7 @@ export default {
       const _this = this;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          axios.put('http://localhost:8181//account/updated', this.account).then(function (resp) {
+          axios.put('http://121.37.137.154:8181//account/updated', this.account).then(function (resp) {
             console.log(resp.data);
             if (resp.data) {
               _this.$alert(_this.account.id + '  修改成功！', '消息', {
@@ -169,6 +169,17 @@ body > .el-container {
 .demo-ruleForm{
   max-width: 500px;
   margin: 0 auto ;
+}
+.background {
+  background-color: #B3C0D1;
+  background-size: 100% 100%;
+  left: 0;
+  top: 0;
+  width:100%;
+  height:100%;  /**宽高100%是为了图片铺满屏幕 */
+  z-index:-1;
+  position: fixed;
+  /*position: absolute;*/
 }
 
 </style>

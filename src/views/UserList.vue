@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-container style="border: 1px solid #eee">
+    <el-container>
       <div class="background">
         <vue-particles
             color="#dedede"
@@ -28,7 +28,7 @@
           <el-menu-item style="color: #333333" index="2"><el-link @click="goHref('/ListProblem')" >题目列表</el-link></el-menu-item>
           <el-menu-item style="color: #333333" index="3" ><el-link @click="goHref('/ProblemStatus')" >提交状态</el-link></el-menu-item>
           <el-menu-item style="color: #333333" index="4" ><el-link @click="goCenter()" >个人中心</el-link></el-menu-item>
-          <el-menu-item style="color: #333333" index="5" > <el-link @click="goExit()" >退出账号</el-link></el-menu-item>
+          <el-menu-item style="color: #333333" index="5" ><el-link @click="goBack()" >返回</el-link></el-menu-item>
         </el-menu>
         <div class="line"></div>
 
@@ -38,9 +38,7 @@
             </el-table-column>
             <el-table-column align="center" prop="sort" label="用户类型" >
             </el-table-column>
-<!--            <el-table-column align="center" prop="UserClass" label="用户所在班级" >-->
-<!--            </el-table-column>-->
-            <el-table-column align="center" prop="phoneNumber" label="用户手机号" >
+          <el-table-column align="center" prop="phoneNumber" label="用户手机号" >
             </el-table-column>
             <el-table-column
                 fixed="right"
@@ -80,6 +78,34 @@ export default {
     }
   },
   methods:{
+    goCenter(){
+      if (sessionStorage.getItem('store')) {
+        this.$store.replaceState(Object.assign({}, this.$store.state, JSON.parse(sessionStorage.getItem('store'))));
+      }
+      const _this=this;
+      if(this.$store.state.userId==null){
+        _this.$message({
+          message:"请登录",
+          type:"error"
+        })
+        this.$router.push('/Login');
+      }
+      else {
+        axios.get('http://121.37.137.154:8181//account/findById/'+_this.$store.state.userId).then(function (resp){
+          _this.account=resp.data;
+          console.log(resp.data)
+          if(_this.account.sort==='学生')
+            _this.$router.push('/SelfCenter');
+          else if(_this.account.sort==='老师')
+            _this.$router.push('/SelfCenterTeacher');
+          else if(_this.account.sort==='管理员')
+            _this.$router.push('/SelfCenterAdmin');
+        })
+      }
+    },
+    goBack(){
+      this.$router.push('/SelfCenterAdmin');
+    },
     goHref(href){
       this.$router.push(href);
     },
@@ -88,7 +114,7 @@ export default {
     },
     page(CurrentPage){
       const _this=this;
-      axios.get('http://localhost:8181//account/findAll/'+CurrentPage+'/10').then(function (resp){
+      axios.get('http://121.37.137.154:8181//account/findAll/'+CurrentPage+'/10').then(function (resp){
             _this.tableData=resp.data.records
             _this.total=resp.data.total
             console.log(_this.tableData)
@@ -97,13 +123,14 @@ export default {
     },
     del(row){
       const _this=this;
-      axios.delete('http://localhost:8181//account/deleteById/'+row.id).then(function (resp) {
+      axios.delete('http://121.37.137.154:8181//account/deleteById/'+row.id).then(function (resp) {
             console.log(resp);
             if (resp.data) {
               _this.$message({
                 type: 'success',
                 message: '已删除用户: ' + row.id
               });
+              _this.$router.push('/UserList');
             }
           }
       )
@@ -117,13 +144,15 @@ export default {
         }
       })
     },
-
+    handleSelect(key, keyPath) {
+      console.log(key, keyPath);
+    },
   },
   created() {
     const _this=this;
     let CurrentPage= this.$route.query.currentPage;
     if(CurrentPage==null)CurrentPage=1;
-    axios.get('http://localhost:8181//account/findAll/'+CurrentPage+'/10').then(function (resp){
+    axios.get('http://121.37.137.154:8181//account/findAll/'+CurrentPage+'/10').then(function (resp){
           _this.tableData=resp.data.records
           _this.total=resp.data.total
           console.log(_this.tableData)
@@ -173,12 +202,15 @@ export default {
 
 
 .background {
+  background-color: #B3C0D1;
+  background-size: 100% 100%;
   left: 0;
   top: 0;
   width:100%;
   height:100%;  /**宽高100%是为了图片铺满屏幕 */
   z-index:-1;
-  position: absolute;
+  position: fixed;
+  /*position: absolute;*/
 }
 
 
