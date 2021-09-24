@@ -1,20 +1,39 @@
 <template>
   <div>
     <el-container>
-      <el-header style="text-align: right; font-size: 12px">
-        <el-row>
-          <el-col :span="13">
-            <div style="font-size: 30px">
-              学生与题目管理
-            </div>
-          </el-col>
+      <div class="background">
+        <vue-particles
+            color="#dedede"
+            :particleOpacity="0.8"
+            :particlesNumber="80"
+            shapeType="circle"
+            :particleSize="4"
+            linesColor="#dedede"
+            :linesWidth="1"
+            :lineLinked="true"
+            :lineOpacity="0.8"
+            :linesDistance="150"
+            :moveSpeed="3"
+            :hoverEffect="true"
+            hoverMode="grab"
+            :clickEffect="true"
+            clickMode="push"
+        >
+        </vue-particles>
+      </div>
 
-          <el-col :span="10">
-            <div class="grid-content bg-purple-light">
-              <el-link @click="goHref('/SelfCenterAdmin')">返回管理中心</el-link>
-            </div>
-          </el-col>
-        </el-row>
+
+      <el-header style=" background-color: #DCDFE6; text-align: right; font-size: 12px;">
+
+        <el-menu style="background-color: Transparent" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+          <el-menu-item style="color: #333333" index="1"><el-link @click="goHref('/Main')" >主页</el-link></el-menu-item>
+          <el-menu-item style="color: #333333" index="2"><el-link @click="goHref('/ListProblem')" >题目列表</el-link></el-menu-item>
+          <el-menu-item style="color: #333333" index="3" ><el-link @click="goHref('/ProblemStatus')" >提交状态</el-link></el-menu-item>
+          <el-menu-item style="color: #333333" index="4" ><el-link @click="goCenter()" >个人中心</el-link></el-menu-item>
+          <el-menu-item style="color: #333333" index="5" > <el-link @click="goExit()" >退出账号</el-link></el-menu-item>
+        </el-menu>
+        <div class="line"></div>
+
       </el-header>
       <el-main>
         <el-form :model="problem"  ref="ruleForm" :rules="rules" label-width="110px" class="demo-form">
@@ -162,7 +181,7 @@ export default {
 }
 
 .el-main {
-  background-color: #E9EEF3;
+  background-color: Transparent;
   color: #333;
   text-align: center;
   line-height: 160px;

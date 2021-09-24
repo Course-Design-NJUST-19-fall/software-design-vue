@@ -4,14 +4,33 @@
 
 
     <el-container style="height: 800px; border: 1px solid #eee">
-      <el-header style=" background-color: #B3C0CD; text-align: right; font-size: 12px;">
+      <div class="background">
+        <vue-particles
+            color="#dedede"
+            :particleOpacity="0.8"
+            :particlesNumber="80"
+            shapeType="circle"
+            :particleSize="4"
+            linesColor="#dedede"
+            :linesWidth="1"
+            :lineLinked="true"
+            :lineOpacity="0.8"
+            :linesDistance="150"
+            :moveSpeed="3"
+            :hoverEffect="true"
+            hoverMode="grab"
+            :clickEffect="true"
+            clickMode="push"
+        >
+        </vue-particles>
+      </div>
+      <el-header style=" background-color: #DCDFE6; text-align: right; font-size: 12px;">
 
-        <el-menu style="background-color: #B3C0CD" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+        <el-menu style="background-color: Transparent" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
           <el-menu-item style="color: #333333" index="1"><el-link @click="goHref('/Main')" >主页</el-link></el-menu-item>
           <el-menu-item style="color: #333333" index="2"><el-link @click="goHref('/ListProblem')" >题目列表</el-link></el-menu-item>
           <el-menu-item style="color: #333333" index="3" ><el-link @click="goHref('/ProblemStatus')" >提交状态</el-link></el-menu-item>
           <el-menu-item style="color: #333333" index="4" ><el-link @click="goCenter()" >个人中心</el-link></el-menu-item>
-          <el-menu-item style="color: #333333" index="6" >  <el-link  @click="goUpdate()" >修改信息</el-link></el-menu-item>
           <el-menu-item style="color: #333333" index="5" > <el-link @click="goExit()" >退出账号</el-link></el-menu-item>
         </el-menu>
         <div class="line"></div>
@@ -199,6 +218,15 @@ export default {
 
 .el-aside {
   color: #333;
+}
+
+.background {
+  left: 0;
+  top: 0;
+  width:100%;
+  height:100%;  /**宽高100%是为了图片铺满屏幕 */
+  z-index:-1;
+  position: absolute;
 }
 
 </style>

@@ -1,7 +1,29 @@
 <template>
   <div>
     <el-container>
-      <el-header>您正在找回密码</el-header>
+      <div class="background">
+        <vue-particles
+            color="#dedede"
+            :particleOpacity="0.8"
+            :particlesNumber="80"
+            shapeType="circle"
+            :particleSize="4"
+            linesColor="#dedede"
+            :linesWidth="1"
+            :lineLinked="true"
+            :lineOpacity="0.8"
+            :linesDistance="150"
+            :moveSpeed="3"
+            :hoverEffect="true"
+            hoverMode="grab"
+            :clickEffect="true"
+            clickMode="push"
+        >
+        </vue-particles>
+      </div>
+
+
+      <el-header style="background-color: Transparent;font-size: xx-large" >您正在找回密码</el-header>
       <el-main>
         <el-form :model="account" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 
@@ -16,9 +38,9 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button v-on:click="goBack">返回</el-button>
+            <el-button type="primary" v-on:click="goBack">返回</el-button>
             <el-button type="primary" @click="submitForm('ruleForm')">确定</el-button>
-            <el-button @click="resetForm('ruleForm')">重置</el-button>
+            <el-button type="primary" @click="resetForm('ruleForm')">重置</el-button>
           </el-form-item>
 
         </el-form>
@@ -114,6 +136,7 @@ export default {
   color: #333;
   text-align: center;
   line-height: 60px;
+  font-family: "楷体", "楷体_GB2312";
 }
 
 .el-aside {
@@ -124,7 +147,7 @@ export default {
 }
 
 .el-main {
-  background-color: #E9EEF3;
+  background-color: Transparent;
   color: #333;
   text-align: center;
   line-height: 160px;

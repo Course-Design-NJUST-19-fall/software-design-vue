@@ -1,9 +1,38 @@
 <template>
   <div>
-    <el-container style="height: 1000px; border: 1px solid #eee">
+    <el-container style="background-color: Transparent; height: 1000px; border: 1px solid #eee">
 
-      <el-header style="font-size: 30px">610B Online Judge</el-header>
-      <el-main>
+
+      <div class="background">
+        <vue-particles
+            color="#dedede"
+            :particleOpacity="0.8"
+            :particlesNumber="80"
+            shapeType="circle"
+            :particleSize="4"
+            linesColor="#dedede"
+            :linesWidth="1"
+            :lineLinked="true"
+            :lineOpacity="0.8"
+            :linesDistance="150"
+            :moveSpeed="3"
+            :hoverEffect="true"
+            hoverMode="grab"
+            :clickEffect="true"
+            clickMode="push"
+        >
+        </vue-particles>
+      </div>
+
+      <el-header style="background-color: Transparent; font-size: 30px">
+        
+
+        <img class="mlogo" src="../assets/title.png"  alt="" >
+
+      </el-header>
+      <br>
+
+      <el-main style="background-color: Transparent" >
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 
           <el-form-item label="用户名" prop="id">
@@ -15,9 +44,9 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button  v-on:click="gotoSignup">注册账号</el-button>
+            <el-button type="primary" v-on:click="gotoSignup">注册账号</el-button>
             <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-            <el-button @click="gotoFindMyself()">忘记密码</el-button>
+            <el-button type="primary" @click="gotoFindMyself()">忘记密码</el-button>
           </el-form-item>
 
         </el-form>
@@ -103,19 +132,12 @@ export default {
 </script>
 
 <style scoped>
-.el-header, .el-footer {
+.el-header {
   background-color: #B3C0D1;
   color: #333;
   text-align: center;
   line-height: 60px;
   font-family: "Arial Black";
-}
-
-.el-aside {
-  background-color: #D3DCE6;
-  color: #333;
-  text-align: center;
-  line-height: 200px;
 }
 
 .el-main {
@@ -141,6 +163,10 @@ body > .el-container {
 .demo-ruleForm{
   max-width: 500px;
   margin: 0 auto ;
+}
+
+.mlogo{
+  height: 160%;
 }
 
 

@@ -1,24 +1,38 @@
 <template>
   <div>
     <el-container style="border: 1px solid #eee">
+      <div class="background">
+        <vue-particles
+            color="#dedede"
+            :particleOpacity="0.8"
+            :particlesNumber="80"
+            shapeType="circle"
+            :particleSize="4"
+            linesColor="#dedede"
+            :linesWidth="1"
+            :lineLinked="true"
+            :lineOpacity="0.8"
+            :linesDistance="150"
+            :moveSpeed="3"
+            :hoverEffect="true"
+            hoverMode="grab"
+            :clickEffect="true"
+            clickMode="push"
+        >
+        </vue-particles>
+      </div>
+      <el-header style=" background-color: #DCDFE6; text-align: right; font-size: 12px;">
 
-        <el-header style="text-align: right; font-size: 12px">
-          <el-row>
-            <el-col :span="14">
-              <div style="font-size: 30px">
-                所有平台用户
-              </div>
-            </el-col>
+        <el-menu style="background-color: Transparent" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+          <el-menu-item style="color: #333333" index="1"><el-link @click="goHref('/Main')" >主页</el-link></el-menu-item>
+          <el-menu-item style="color: #333333" index="2"><el-link @click="goHref('/ListProblem')" >题目列表</el-link></el-menu-item>
+          <el-menu-item style="color: #333333" index="3" ><el-link @click="goHref('/ProblemStatus')" >提交状态</el-link></el-menu-item>
+          <el-menu-item style="color: #333333" index="4" ><el-link @click="goCenter()" >个人中心</el-link></el-menu-item>
+          <el-menu-item style="color: #333333" index="5" > <el-link @click="goExit()" >退出账号</el-link></el-menu-item>
+        </el-menu>
+        <div class="line"></div>
 
-            <el-col :span="10">
-              <div class="grid-content bg-purple-light">
-                <el-link @click="goHref('/SelfCenterAdmin')">返回管理中心</el-link>
-              </div>
-            </el-col>
-          </el-row>
-        </el-header>
-        <br>
-
+      </el-header>
           <el-table :data="tableData" style="text-align: center">
             <el-table-column align="center" prop="id" label="用户名"   >
             </el-table-column>
@@ -131,9 +145,7 @@ export default {
   height:500px;
 }
 
-.el-aside {
-  color: #333;
-}
+
 
 .el-carousel__item h3 {
   color: #475669;
@@ -159,14 +171,15 @@ export default {
 
 }
 
-.el-footer{
-  position:absolute;
-  color:#fff;
-  bottom: 100px;
+
+.background {
+  left: 0;
+  top: 0;
   width:100%;
-  height:100px;
-  line-height:10px;
-  text-align:center;
-  background-color: white;
+  height:100%;  /**宽高100%是为了图片铺满屏幕 */
+  z-index:-1;
+  position: absolute;
 }
+
+
 </style>

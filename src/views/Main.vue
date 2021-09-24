@@ -2,9 +2,30 @@
   <div>
 
 
-    <el-container style="height: 500px; border: 1px solid #eee">
-<el-header>
-  <el-menu style="background-color: #B3C0CD" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+    <el-container style="height: 750px; border: 1px solid #eee">
+      <div class="background">
+        <vue-particles
+            color="#dedede"
+            :particleOpacity="0.8"
+            :particlesNumber="80"
+            shapeType="circle"
+            :particleSize="4"
+            linesColor="#dedede"
+            :linesWidth="1"
+            :lineLinked="true"
+            :lineOpacity="0.8"
+            :linesDistance="150"
+            :moveSpeed="3"
+            :hoverEffect="true"
+            hoverMode="grab"
+            :clickEffect="true"
+            clickMode="push"
+        >
+        </vue-particles>
+      </div>
+
+      <el-header style="background-color: #DCDFE6">
+  <el-menu style="background-color: Transparent" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
     <el-menu-item style="color: #333333" index="1"><el-link @click="goHref('/Main')" >主页</el-link></el-menu-item>
     <el-menu-item style="color: #333333" index="2"><el-link @click="goHref('/ListProblem')" >题目列表</el-link></el-menu-item>
     <el-menu-item style="color: #333333" index="3" ><el-link @click="goHref('/ProblemStatus')" >提交状态</el-link></el-menu-item>
@@ -13,11 +34,23 @@
   <div class="line" ></div>
 </el-header>
 
-      <el-main>
-         <h1>
-           Online Judge
-         </h1>
+      <el-main >
 
+        <div >
+          <h2 class="word-v-middle" style="font-size: xx-large;">欢迎回来</h2>
+          <br>
+          <div >
+            <div class="word-v-middle" style="font-size: larger">
+              距 <strong>CSP-J/S 2021 第二轮</strong> 还剩 <strong>28 天</strong><br>
+              </div>
+            <div class="word-v-middle" style="font-size: larger">
+              距 <strong>NOIP 2021</strong> 还剩 <strong>56 天</strong><br>
+            </div>
+          </div>
+        </div>
+
+        <el-calendar v-model="value">
+        </el-calendar>
       </el-main>
 
 
@@ -34,7 +67,8 @@ export default {
     return {
       tableData: Array(20).fill(item),
       activeIndex: '1',
-      activeIndex2: '1'
+      activeIndex2: '1',
+      value: new Date()
     }
   },
   methods:{
@@ -114,15 +148,27 @@ export default {
 
 }
 
-.el-footer{
-  position:absolute;
-  color:#fff;
-  bottom: 100px;
-  width:100%;
-  height:100px;
-  line-height:10px;
-  text-align:center;
-  background-color: white;
+.el-calendar{
+  align-self: center;
+  align-items: center;
+  align-content: center;
+margin-left: 200px;
+  margin-right: 200px;
+  margin-bottom: 300px;
+}
+
+.word-v-middle{
+  margin-bottom: 0;
+  font-size: 12px;
+  min-height: 31px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 31px;
+  margin-top: 5px;
+  color: black;
+  white-space: normal;
+  font-family: "楷体", "楷体_GB2312";
 }
 
 </style>

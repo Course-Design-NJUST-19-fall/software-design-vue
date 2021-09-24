@@ -3,10 +3,30 @@
 
     <el-container style="height: 800px; border: 1px solid #eee">
 
+      <div class="background">
+        <vue-particles
+            color="#dedede"
+            :particleOpacity="0.8"
+            :particlesNumber="80"
+            shapeType="circle"
+            :particleSize="4"
+            linesColor="#dedede"
+            :linesWidth="1"
+            :lineLinked="true"
+            :lineOpacity="0.8"
+            :linesDistance="150"
+            :moveSpeed="3"
+            :hoverEffect="true"
+            hoverMode="grab"
+            :clickEffect="true"
+            clickMode="push"
+        >
+        </vue-particles>
+      </div>
 
-      <el-header style=" background-color: #B3C0CD; text-align: right; font-size: 12px;">
+      <el-header style=" background-color: #DCDFE6; text-align: right; font-size: 12px;">
 
-        <el-menu style="background-color: #B3C0CD" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+        <el-menu style="background-color: Transparent" :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
           <el-menu-item style="color: #333333" index="1"><el-link @click="goHref('/Main')" >主页</el-link></el-menu-item>
           <el-menu-item style="color: #333333" index="2"><el-link @click="goHref('/ListProblem')" >题目列表</el-link></el-menu-item>
           <el-menu-item style="color: #333333" index="3" ><el-link @click="goHref('/ProblemStatus')" >提交状态</el-link></el-menu-item>
@@ -18,35 +38,35 @@
 
       </el-header>
       <el-container>
-<!--        <el-aside width="400px" style="background-color: rgb(238, 241, 246)">-->
-<!--          <el-menu :default-openeds="['1','2', '3','4','5','6']">-->
-<!--            <el-submenu index="1">-->
-<!--              <template slot="title">青铜</template>-->
-<!--              <el-menu-item index="1-1">过题数<10,正确率<10%</el-menu-item>-->
-<!--            </el-submenu>-->
-<!--            <el-submenu index="2">-->
-<!--              <template slot="title">白银</template>-->
-<!--              <el-menu-item index="2-1">10<=过题数<50,    10% < 正确率 < 20%</el-menu-item>-->
-<!--            </el-submenu>-->
-<!--            <el-submenu index="3">-->
-<!--              <template slot="title">黄金</template>-->
-<!--              <el-menu-item index="3-1">50<=过题数<100,    20%< 正确率 < 30%</el-menu-item>-->
-<!--            </el-submenu>-->
-<!--            <el-submenu index="4">-->
-<!--              <template slot="title">铂金</template>-->
-<!--              <el-menu-item index="4-1">100<=过题数<500,    30% < 正确率 < 40% </el-menu-item>-->
-<!--            </el-submenu>-->
-<!--            <el-submenu index="5">-->
-<!--              <template slot="title">钻石</template>-->
-<!--              <el-menu-item index="5-1">500<=过题数<1000,    40% < 正确率 < 50% </el-menu-item>-->
-<!--            </el-submenu>-->
-<!--            <el-submenu index="6">-->
-<!--              <template slot="title">王者</template>-->
-<!--              <el-menu-item index="6-1">1000 < 过题数 ,    50% < 正确率 </el-menu-item>-->
-<!--            </el-submenu>-->
+        <el-aside width="400px" style="background-color: rgb(238, 241, 246)">
+          <el-menu :default-openeds="['1','2', '3','4','5','6']">
+            <el-submenu index="1">
+              <template slot="title">青铜</template>
+              <el-menu-item index="1-1">积分<100</el-menu-item>
+            </el-submenu>
+            <el-submenu index="2">
+              <template slot="title">白银</template>
+              <el-menu-item index="2-1"> 100<=积分<200 </el-menu-item>
+            </el-submenu>
+            <el-submenu index="3">
+              <template slot="title">黄金</template>
+              <el-menu-item index="3-1">200<=积分<500</el-menu-item>
+            </el-submenu>
+            <el-submenu index="4">
+              <template slot="title">铂金</template>
+              <el-menu-item index="4-1">500<=积分<1000</el-menu-item>
+            </el-submenu>
+            <el-submenu index="5">
+              <template slot="title">钻石</template>
+              <el-menu-item index="5-1">1000<=积分<3000</el-menu-item>
+            </el-submenu>
+            <el-submenu index="6">
+              <template slot="title">王者</template>
+              <el-menu-item index="6-1">3000<=积分</el-menu-item>
+            </el-submenu>
 
-<!--          </el-menu>-->
-<!--        </el-aside>-->
+          </el-menu>
+        </el-aside>
         <el-main>
           <br>
           <el-descriptions title="个人信息" direction="vertical" :column="2" border>
@@ -199,6 +219,13 @@ export default {
   color: #333;
 }
 
-
+.background {
+  left: 0;
+  top: 0;
+  width:100%;
+  height:100%;  /**宽高100%是为了图片铺满屏幕 */
+  z-index:-1;
+  position: absolute;
+}
 
 </style>
