@@ -34,7 +34,7 @@
 
       </el-header>
           <el-table :data="tableData" style="text-align: center">
-            <el-table-column align="center" prop="id" label="用户名"   >
+            <el-table-column align="center" prop="id" label="用户名"  >
             </el-table-column>
             <el-table-column align="center" prop="sort" label="用户类型" >
             </el-table-column>

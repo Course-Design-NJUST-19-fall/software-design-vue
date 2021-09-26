@@ -18,6 +18,7 @@ import UserList from '../views/UserList.vue'
 import Main from '../views/Main.vue'
 import FindPassword from "@/views/FindPassword";
 import CheckAccount from "@/views/CheckAccount";
+import CheckCEMessage from "@/views/CheckCEMessage";
 
 Vue.use(VueRouter)
 
@@ -117,6 +118,11 @@ const routes = [
     path: '/CheckAccount',
     name:'CheckAccount',
     component: CheckAccount
+  },
+  {
+    path:'/CheckCEMessage',
+    name:'CheckCEMessage',
+    component: CheckCEMessage
   }
 
 ]

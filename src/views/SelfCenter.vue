@@ -38,9 +38,38 @@
 
       </el-header>
       <el-container>
+        <el-aside width="300px" style="background-color: rgb(238, 241, 246);">
+          <p style="font-family: '楷体'; font-size: 20px;text-align: center">积分排名</p>
+          <el-table :data="ratingList" style="text-align: center">
+            <el-table-column label="排名">
+              <template slot-scope="scope">
+                {{scope.$index+1}}
+              </template>
+            </el-table-column>
+            <el-table-column align="center" prop="nicoName" label="昵称" v-if="this.ratingList.sort!=='管理员'">
+            </el-table-column>
+            <el-table-column align="center" prop="rating" label="积分" v-if="this.ratingList.sort!=='管理员'">
+            </el-table-column>
+            <el-table-column
+                v-if="false"
+                align="center"
+                prop="sort"
+                label="类型"
+            >
+            </el-table-column>
+          </el-table>
+          <el-pagination
+              background
+              layout="prev, pager, next"
+              page-size="10"
+              :total="total"
+              @current-change="page"
+          >
+          </el-pagination>
+        </el-aside>
         <el-main>
-          <br>
-          <el-descriptions title="个人信息" direction="vertical" :column="2" border>
+          <h3 style="font-family: '楷体'; font-size: 25px;text-align: center">个人信息</h3>
+          <el-descriptions style="font-family: '楷体';font-size: 15px;"  direction="vertical" :column="2" border>
             <el-descriptions-item label="用户名">{{ account.id }}</el-descriptions-item><br>
             <el-descriptions-item label="昵称">{{ account.nicoName }}</el-descriptions-item><br>
             <el-descriptions-item label="用户类型" >{{ account.sort }}</el-descriptions-item><br>
@@ -64,6 +93,8 @@ export default {
   data() {
     return {
       activeIndex: '4',
+      ratingList: null,
+      total:null,
       account: {
         id:null,
         password:null,
@@ -134,6 +165,15 @@ export default {
     },
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
+    },
+    page(CurrentPage){
+      const _this=this;
+      axios.get('http://121.37.137.154:8181//account/getRank/'+CurrentPage+'/10').then(function (resp){
+            _this.ratingList=resp.data.records
+            _this.total=resp.data.total
+            console.log(_this.ratingList)
+          }
+      )
     }
   },
   created() {
@@ -154,6 +194,12 @@ export default {
           _this.account=resp.data;
           console.log(resp.data)
       })
+      axios.get('http://121.37.137.154:8181//account/getRank/1/10').then(function (resp){
+            _this.ratingList=resp.data.records.filter(item=>item.sort!=='管理员')
+            _this.total=resp.data.total
+            console.log(_this.ratingList)
+          }
+      )
     }
   }
 }

@@ -26,7 +26,7 @@
     <el-descriptions title="个人信息" direction="vertical" :column="2" border>
       <el-descriptions-item label="用户名">{{ account.id }}</el-descriptions-item><br>
       <el-descriptions-item label="昵称">{{ account.nicoName }}</el-descriptions-item><br>
-      <el-descriptions-item label="昵称">{{ account.password }}</el-descriptions-item><br>
+      <el-descriptions-item label="密码">{{ account.password }}</el-descriptions-item><br>
       <el-descriptions-item label="用户类型" >{{ account.sort }}</el-descriptions-item><br>
       <el-descriptions-item label="手机号">{{ account.phoneNumber }}</el-descriptions-item><br>
       <el-descriptions-item label="通过数量" >{{ account.acceptNumber }}</el-descriptions-item><br>

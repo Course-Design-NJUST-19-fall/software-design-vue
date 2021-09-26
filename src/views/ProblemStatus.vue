@@ -65,7 +65,7 @@
             <span v-if="scope.row.result == 'UNABLE_TO_SECCOMP'" style="color:blue">unable to limit system call</span>
             <span v-if="scope.row.result == 'UNABLE_TO_LIMIT_REAL_TIME'" style="color:blue">unable to limit real time</span>
             <span v-if="scope.row.result == 'CONFIG_ERROR'" style="color:blue">sandbox setting error</span>
-            <span v-if="scope.row.result == 'COMPILATION_ERROR'" style="color:blue">Compilation Error</span>
+            <span v-if="scope.row.result == 'COMPILATION_ERROR'" style="color:blue" @click="goCEMessage(scope.row)">Compilation Error</span>
           </template>
         </el-table-column>
         <el-table-column align="center" prop="cpuTimeCost" label="使用时间" >
@@ -146,6 +146,15 @@ export default {
             console.log(_this.testRecord)
           }
       )
+    },
+    goCEMessage(row){
+      this.$router.push({
+        path:'/CheckCEMessage',
+        query:{
+          id:row.id,
+          url:this.$route.path
+        }
+      })
     }
   },
   created() {
